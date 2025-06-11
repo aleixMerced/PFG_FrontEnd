@@ -1,0 +1,33 @@
+<div class="sidebar" [class.active]="sidebarOpen">
+  <div class="toggle-button" (click)="toggleSidebar()">
+    <span *ngIf="!sidebarOpen">&#9654;</span>
+    <span *ngIf="sidebarOpen">&#9664;</span>
+  </div>
+
+  <div class="comandes">
+    <div class="comandes-bdd" *ngFor="let comanda of comandes">
+      <div class="comanda-header" (dblclick)="modificarComanda(comanda)">
+        <strong>Comanda - {{ comanda.nomClient }}</strong>
+        <span style="float: right;" (click)="toggleComanda(comanda)">
+           {{ comanda.expanded ? '🔽' : '▶️' }}
+        </span>
+      </div>
+
+      <div class="comanda-detall" *ngIf="comanda.expanded">
+        <p><strong>Data:</strong> {{ comanda.dataComanda | date:'short' }}</p>
+        <p><strong>Taula:</strong> {{ comanda.idTaula === 99 ? 'BARRA' : comanda.idTaula }}</p>
+        <p><strong>Preu:</strong> {{ comanda.preuComanda | currency:'EUR' }}</p>
+
+          <div class="comanda-buttons">
+            <button class="comanda-btn" (click)="modificarComanda(comanda)">MODIFICAR</button>
+            <button class="comanda-btn" (click)="pagarComanda(comanda)">PAGAR</button>
+          </div>
+
+      </div>
+
+      <hr>
+    </div>
+  </div>
+</div>
+
+<ng-template #comandaModal></ng-template>

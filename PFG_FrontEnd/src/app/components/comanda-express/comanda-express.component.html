@@ -1,0 +1,36 @@
+<div class="container">
+
+
+  <div class="visor" *ngIf="quantitatActual !== ' '">
+    <span class="visor-esquerra">{{ quantitatVisor }}</span>
+    <span class="visor-dreta">{{ quantitatActual }}</span>
+  </div>
+
+
+  <div class="main">
+    <div class="number-pad">
+      <button (click)="onNumberClick('1')">1</button>
+      <button (click)="onNumberClick('2')">2</button>
+      <button (click)="onNumberClick('3')">3</button>
+      <button (click)="onNumberClick('4')">4</button>
+      <button (click)="onNumberClick('5')">5</button>
+      <button (click)="onNumberClick('6')">6</button>
+      <button (click)="onNumberClick('7')">7</button>
+      <button (click)="onNumberClick('8')">8</button>
+      <button (click)="onNumberClick('9')">9</button>
+      <button (click)="onNumberClick('0')">0</button>
+      <button (click)="onNumberClick(',')">,</button>
+      <button (click)="onNumberClick('00')">00</button>
+    </div>
+
+    <div class="side-buttons">
+      <button class="botoSumar" (click)="sumarNumero()">+</button>
+      <button class="botoRestar" (click)="esborrarUnNumero()">-</button>
+      <button (click)="onClickReset() ">{{ textRest }}</button>
+      <button (click)="mostrarSubTotal()">SUBTOTAL</button>
+      <button (click)="cobrarComanda()">COBRAR</button>
+    </div>
+  </div>
+
+
+</div>

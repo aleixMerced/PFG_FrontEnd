@@ -1,0 +1,243 @@
+.comanda-express {
+  position: absolute;
+  top: 20px;
+  left: 50px;
+  background-color: #f4f4f4;
+  border: 2px solid black;
+  padding: 20px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-family: Arial, sans-serif;
+}
+@media (max-width: 1000px), (max-height: 700px) {
+  .comanda-express {
+    width: 300px;
+    height: 300px;
+    padding: 10px;
+    font-size: 14px;
+    z-index: 1;
+  }
+
+
+}
+
+.pla-general{
+  height: 100vh;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: 1fr 2px 1fr;
+}
+
+.part-superior{
+  grid-row: 1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.part-superior-esquerra{
+  grid-column: 2;
+  margin-left: 250px;
+
+}
+
+.part-superior-dreta{
+
+  grid-column: 3;
+  margin-left: 150px;
+
+}
+
+.part-inferior{
+
+  grid-row: 2;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+}
+
+.part-inferior-dreta{
+
+  grid-column: 3;
+  margin-left: 150px;
+}
+
+.taula{
+
+  padding: 20px;
+
+}
+
+.linia-negra {
+  height: 2px;
+  background-color: black;
+  margin: -10px 0 0 auto;
+  width: 50%;
+  display: block;
+
+
+}
+
+
+
+.obrir-barra {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  grid-column: span 2;
+  position: fixed;
+  background-color: lightgreen;
+  height: 100px;
+  width: 40%;
+  font-size: 38px;
+  padding: 10px;
+  text-align: center;
+  cursor: pointer;
+  margin-left: 10px;
+  margin-top: 150px;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 9999;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+
+  &:active {
+    transform: translateY(1px);
+  }
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
+
+
+.modal-productes {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  width: 70vw; /* més gran */
+  height: 80vh;
+  transform: translate(-50%, -50%);
+  border-radius: 12px;
+  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
+  z-index: 10000;
+  overflow: auto;
+  cursor: default;
+
+  &.header{
+    background: #007bff;
+    color: white;
+    padding: 10px;
+    font-weight: bold;
+    cursor: move; /* cursor de drag */
+    border-top-left-radius: 12px;
+    border-top-right-radius: 12px;
+    user-select: none;
+  }
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+}
+
+.modal-barra-comandes{
+  z-index: 99999;
+}
+
+
+/* Estil per al contenidor de confirmació */
+.confirmacio-cobrar {
+  /* Caixa centrada i amb aparença de modal */
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 24px;
+  width: 320px;
+  max-width: 90%;
+  z-index: 10001;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  > span {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #333333;
+  }
+
+  .boto-container {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  button {
+    flex: 1;
+    padding: 10px 0;
+    font-size: 0.975rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease, transform 0.1s ease;
+
+    &:active {
+      transform: translateY(1px);
+    }
+  }
+
+  .botoEfectiu {
+    background-color: #28a745;
+    color: #ffffff;
+
+    &:hover {
+      background-color: darken(#28a745, 8%);
+    }
+  }
+
+  .botoTargeta {
+    background-color: #007bff;
+    color: #ffffff;
+
+    &:hover {
+      background-color: darken(#007bff, 8%);
+    }
+  }
+
+  .botoCancelar {
+    background-color: transparent;
+    color: #555555;
+    border: 1px solid #cccccc;
+
+    &:hover {
+      background-color: #f2f2f2;
+    }
+  }
+}
+
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 10000;
+}
+
+

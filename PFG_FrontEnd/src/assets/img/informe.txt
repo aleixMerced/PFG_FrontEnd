@@ -1,0 +1,12 @@
+Aleix Merced i Natàlia Masgrau
+
+Parts de la pràctica que hem implementat:
+    - Exercici 1 -> creiem que funciona
+    - Exercici 2 -> creiem que funciona
+    - Exercici 3 -> creiem que funciona
+    - Exercici 4 -> creiem que funciona
+    - Exercici 5 -> creiem que funciona
+    - Exercici 6 -> creiem que funciona, tot i que l'output no hem aconseguit posar-lo amb el mateix format
+    - Exercici 7 -> creiem que funciona
+
+Utilizem SWI Prolog

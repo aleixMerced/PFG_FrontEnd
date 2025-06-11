@@ -1,0 +1,74 @@
+<div class="selector">
+  <div class="header" (click)="toggledesplegat()">
+    <h2>{{ titol }}</h2>
+    <span>{{ desplegat ? '🔼' : '🔽' }}</span>
+  </div>
+
+  <div class="cos" *ngIf="desplegat">
+    <input
+      type="text"
+      [(ngModel)]="filtreNom"
+      placeholder="Buscar producte..."
+      class="input-filtre"
+    />
+
+
+
+
+
+    <!-- Bucle per grups de tipus -->
+    <ng-container *ngIf="filtreNom.trim() === ''">
+      <div *ngFor="let tipus of tipusProducte">
+        <div class="tipus-header" (click)="toggleTipus(tipus)">
+          <h3>{{ tipus }}</h3>
+          <span>{{ esDesplegat(tipus) ? '🔽' : '▶️' }}</span>
+        </div>
+        <div class="grid" *ngIf="esDesplegat(tipus)">
+          <div class="producte"
+               *ngFor="let p of productesPerTipus(tipus)"
+               (click)="seleccionarProducte(p)">
+            <img [src]="p.imatgeProducte" [alt]="p.nomProducte">
+            <p>{{ p.nomProducte }}</p>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Filtratge -->
+    <ng-container *ngIf="filtreNom.trim() !== ''">
+      <div class="grid">
+        <div class="producte"
+             *ngFor="let p of productesFiltrat()"
+             (click)="seleccionarProducte(p)">
+          <img [src]="p.imatgeProducte" [alt]="p.nomProducte">
+          <p>{{ p.nomProducte }}</p>
+        </div>
+      </div>
+      <p *ngIf="productesFiltrat().length === 0">No hi ha productes que coincideixin.</p>
+    </ng-container>
+  </div>
+
+  <div class="quantitat-overlay" *ngIf="obrirQuantitat && producteSeleccionat">
+    <div class="quantitat-modal">
+      <h3>Escriu les unitats de {{ producteSeleccionat?.nomProducte }}?</h3>
+      <button type="button" class="btn-spin" (click)="modificarQuantitat('NEGATIU')" [disabled]="quantitat <= 0">−</button>
+      <input
+        type="number"
+        [(ngModel)]="quantitat"
+        min="1"
+        class="input-quantitat"
+      />
+      <button type="button" class="btn-spin" (click)="modificarQuantitat('POSITIU')">+</button>
+
+      <div class="botons">
+        <button (click)="confirmarQuantitat()">Afegeix</button>
+        <button (click)="cancelarQuantitat()">Cancel·la</button>
+        <button (click)="eliminarQuantitat()">Eliminar</button>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+
+
