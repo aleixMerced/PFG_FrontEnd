@@ -1,0 +1,213 @@
+<div class="config-wrapper">
+
+  <button class="back-btn" (click)="tornarEnrere()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <div class="config-panel">
+    <h1 class="titol">Estadístiques</h1>
+
+    <form class="estadistiques-form">
+
+      <div class="selector-estadistica">
+        <label for="tipusSelect" class="selector-label">
+          Tipus d'estadística que vols treure
+        </label>
+
+        <select
+          id="tipusSelect"
+          name="tipusSelect"
+          class="selector-combo"
+          [(ngModel)]="tipusEstadistica"
+          (ngModelChange)="onCanviTipus($event)">
+          <option [ngValue]="null" disabled>Selecciona un tipus</option>
+          <option value="diaria">Diària</option>
+          <option value="setmanal">Setmanal</option>
+          <option value="mensual">Mensual</option>
+          <option value="anual">Anual</option>
+        </select>
+      </div>
+
+      <div *ngIf="mostrarDetall" class="detall-container">
+
+        <div class="header-row">
+          <div class="estat-info">
+            <span class="label">Tipus seleccionat</span>
+            <span class="nom">
+              {{ tipusEstadistica === 'diaria'   ? 'Estadística diària'   : '' }}
+              {{ tipusEstadistica === 'setmanal' ? 'Estadística setmanal' : '' }}
+              {{ tipusEstadistica === 'mensual'  ? 'Estadística mensual'  : '' }}
+              {{ tipusEstadistica === 'anual'    ? 'Estadística anual'    : '' }}
+            </span>
+          </div>
+        </div>
+
+        <div class="form-grid" [ngSwitch]="tipusEstadistica">
+
+          <!-- DIÀRIA -->
+          <div *ngSwitchCase="'diaria'" class="form-field form-field-full">
+            <label class="soft-label">Data del resum</label>
+
+            <mat-form-field appearance="outline" class="mat-field date-field" floatLabel="auto">
+              <input
+                matInput
+                [matDatepicker]="picker"
+                placeholder="Toca per triar una data"
+                [ngModel]="dataDiaria"
+                (ngModelChange)="onCanviDataDiaria($event)"
+                name="dataDiaria"
+                readonly
+                (click)="picker.open()" />
+
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker touchUi="true"></mat-datepicker>
+            </mat-form-field>
+
+            <div class="helper-text" *ngIf="!dataDiaria">
+              Selecciona un dia per carregar el resum.
+            </div>
+          </div>
+
+          <!-- SETMANAL -->
+          <ng-container *ngSwitchCase="'setmanal'">
+            <div class="form-field clickable-field">
+              <label for="anySetmanal">Any</label>
+              <input
+                id="anySetmanal"
+                name="anySetmanal"
+                type="text"
+                [value]="anySetmanal !== null ? anySetmanal : ''"
+                placeholder="Toca per introduir l'any"
+                readonly
+                (click)="obrirTeclat('anySetmanal')" />
+            </div>
+
+            <div class="form-field clickable-field">
+              <label for="setmana">Setmana</label>
+              <input
+                id="setmana"
+                name="setmana"
+                type="text"
+                [value]="setmana !== null ? setmana : ''"
+                placeholder="Toca per introduir la setmana"
+                readonly
+                (click)="obrirTeclat('setmana')" />
+            </div>
+          </ng-container>
+
+          <!-- MENSUAL -->
+          <ng-container *ngSwitchCase="'mensual'">
+            <div class="form-field clickable-field">
+              <label for="anyMensual">Any</label>
+              <input
+                id="anyMensual"
+                name="anyMensual"
+                type="text"
+                [value]="anyMensual !== null ? anyMensual : ''"
+                placeholder="Toca per introduir l'any"
+                readonly
+                (click)="obrirTeclat('anyMensual')" />
+            </div>
+
+            <div class="form-field">
+              <label for="mesMensual">Mes</label>
+              <select
+                id="mesMensual"
+                name="mesMensual"
+                [(ngModel)]="mesMensual"
+                (change)="onCanviFiltre()">
+                <option [ngValue]="null">Selecciona un mes</option>
+                <option *ngFor="let m of mesos" [ngValue]="m.value">
+                  {{ m.label }}
+                </option>
+              </select>
+            </div>
+          </ng-container>
+
+          <!-- ANUAL -->
+          <ng-container *ngSwitchCase="'anual'">
+            <div class="form-field form-field-full clickable-field">
+              <label for="anyAnual">Any</label>
+              <input
+                id="anyAnual"
+                name="anyAnual"
+                type="text"
+                [value]="anyAnual !== null ? anyAnual : ''"
+                placeholder="Toca per introduir l'any"
+                readonly
+                (click)="obrirTeclat('anyAnual')" />
+            </div>
+          </ng-container>
+
+        </div>
+
+        <div class="loading-text" *ngIf="carregantResum">
+          Carregant resum...
+        </div>
+
+        <!-- ✅ RESULTATS: 4 caixes iguals al costat -->
+        <div class="resultat-container" *ngIf="resumCarregat && resum as r">
+          <div class="resultats-inner">
+
+            <div class="stats-row">
+              <div class="stat-box">
+                <span class="stat-label">Total</span>
+                <span class="stat-value">{{ r.total | number:'1.2-2' }}</span>
+              </div>
+
+              <div class="stat-box">
+                <span class="stat-label">Unitats venudes</span>
+                <span class="stat-value">{{ r.productesTotals }}</span>
+              </div>
+
+              <div class="stat-box">
+                <span class="stat-label">Menús fets</span>
+                <span class="stat-value">{{ r.menusFets }}</span>
+              </div>
+
+              <div class="stat-box">
+                <span class="stat-label">Producte més venut</span>
+                <span class="stat-value">
+                  {{ r.nomMesVenut ?? '—' }}
+                  <span *ngIf="r.unitatsMesVenut !== null">
+                    ({{ r.unitatsMesVenut }} u.)
+                  </span>
+                </span>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="form-actions export-actions">
+          <button class="primary-btn" type="button" (click)="exportarPdf()">
+            Exportar PDF
+          </button>
+
+          <button class="secondary-btn" type="button" (click)="exportarExcel()">
+            Exportar Excel
+          </button>
+        </div>
+
+      </div>
+
+    </form>
+  </div>
+
+  <!-- OVERLAY TECLAT NUMÈRIC -->
+  <div class="overlay" *ngIf="mostrarTeclat">
+    <div class="overlay-backdrop" (click)="tancarTeclat()"></div>
+
+    <div class="overlay-panel">
+      <app-teclat-numeric
+        [title]="teclatTitle"
+        [initialValue]="valorTeclatInicial"
+        (ok)="onTeclatOk($event)"
+        (close)="tancarTeclat()">
+      </app-teclat-numeric>
+    </div>
+  </div>
+
+
+
+</div>

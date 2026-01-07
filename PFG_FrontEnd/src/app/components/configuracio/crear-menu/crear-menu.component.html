@@ -1,0 +1,130 @@
+<div class="config-wrapper">
+  <button class="back-btn" (click)="tornarEnrere()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <div class="config-panel">
+    <h1 class="titol">Crear menú</h1>
+
+    <div class="config-grid">
+      <!-- PRIMERS -->
+      <div class="grid-card">
+        <div class="grid-title">Escull primers plats</div>
+
+        <div class="table">
+          <input
+            class="filter-input"
+            type="text"
+            placeholder="Cerca plat"
+            [(ngModel)]="filterPrimers"
+          />
+
+          <div class="row" *ngFor="let x of primersFiltrats">
+            <div class="check">
+              <input type="checkbox" [(ngModel)]="x.checked" />
+            </div>
+            <div class="grid c-name">{{ x.producte.nomProducte }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEGONS -->
+      <div class="grid-card">
+        <div class="grid-title">Escull segons plats</div>
+
+        <div class="table">
+          <input
+            class="filter-input"
+            type="text"
+            placeholder="Cerca per nom..."
+            [(ngModel)]="filterSegons"
+          />
+
+          <div class="row" *ngFor="let x of segonsFiltrats">
+            <div class="check">
+              <input type="checkbox" [(ngModel)]="x.checked" />
+            </div>
+            <div class="grid c-name">{{ x.producte.nomProducte }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER: Tipus menu + botons, tot a la mateixa altura -->
+    <div class="panel-footer">
+      <div class="footer-left">
+        <div class="menu-type">
+          <div class="menu-type-label">Tipus de menú</div>
+
+          <div class="segmented" role="group" aria-label="Tipus de menú">
+            <button
+              type="button"
+              class="seg-btn"
+              [class.active]="IdMenu === 11"
+              (click)="setTipusMenu(11)">
+              Diari
+            </button>
+
+            <button
+              type="button"
+              class="seg-btn"
+              [class.active]="IdMenu === 10"
+              (click)="setTipusMenu(10)">
+              Festiu
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-right">
+
+        <button class="import-btn" type="button" (click)="anarACrearProducte()">
+          Crear producte
+        </button>
+
+        <button class="import-btn import-btn--green" type="button" (click)="importarMenu(importPicker)">
+          Importar menú
+        </button>
+
+        <button class="import-btn" type="button" (click)="guardarMenu(savePicker)">
+          Guardar menú
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <mat-form-field class="hidden-date-field" appearance="fill">
+    <input matInput [matDatepicker]="importPicker" (dateChange)="onImportDateChange($event.value)" />
+    <mat-datepicker #importPicker [touchUi]="true"></mat-datepicker>
+  </mat-form-field>
+
+  <mat-form-field class="hidden-date-field" appearance="fill">
+    <input matInput [matDatepicker]="savePicker" (dateChange)="onSaveDateChange($event.value)" />
+    <mat-datepicker #savePicker [touchUi]="true"></mat-datepicker>
+  </mat-form-field>
+
+  <!-- CONFIRMACIÓ -->
+  <ng-template #confirmDialog let-dialogRef="dialogRef">
+    <div class="confirm-modal">
+      <h2 class="confirm-title">Confirmació</h2>
+
+      <p class="confirm-text">
+        Crear menú dia <b>{{ DiaMenuNormal }}</b>?
+      </p>
+
+      <p class="confirm-sub">
+        Tipus: <b>{{ IdMenu === 10 ? 'Festiu' : 'Diari' }}</b>
+      </p>
+
+      <div class="confirm-actions">
+        <button class="import-btn" type="button" (click)="cancelarGuardar(dialogRef)">
+          Cancel·lar
+        </button>
+        <button class="import-btn import-btn--green" type="button" (click)="confirmarGuardar(dialogRef)">
+          Confirmar
+        </button>
+
+      </div>
+    </div>
+  </ng-template>
+</div>

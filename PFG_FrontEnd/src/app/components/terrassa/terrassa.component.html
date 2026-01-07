@@ -1,0 +1,30 @@
+<div class="pla-general">
+  <div
+    class="taules taula-simple"
+    *ngFor="let taula of taules"
+    (click)="onClickTaula(taula)"
+    [class.taula-selected]="isTaulaSelected(taula)"
+    [class.ocupada]="taula.ocupat">
+
+    <div class="taula-wrapper">
+      <img class="taula-img" [src]="getTaulaImg(taula)" />
+      <span class="taula-id">{{ taula.numTaula }}</span>
+    </div>
+  </div>
+</div>
+
+<div class="accions-taula">
+  <h3 *ngIf="selectedTaula" class="titol">
+    Taula: {{ selectedTaulaLabel }}
+  </h3>
+
+  <div class="botons" *ngIf="mostrarbotons">
+    <button class="botoOpcio" (click)="buscarHistoric()" [disabled]="!selectedTaula">
+      <span>Històric comandes</span>
+    </button>
+
+    <button class="botoOpcio" (click)="afegirDesocuparTaula()" [disabled]="!selectedTaula">
+      <span>{{ selectedTaula?.ocupat ? 'Desocupar taula' : 'Afegir comanda taula' }}</span>
+    </button>
+  </div>
+</div>

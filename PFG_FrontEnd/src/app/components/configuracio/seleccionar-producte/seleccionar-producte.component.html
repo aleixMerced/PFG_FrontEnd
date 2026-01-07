@@ -1,0 +1,118 @@
+<div class="config-wrapper">
+
+  <button class="back-btn" (click)="tornarEnrere()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <div class="config-panel">
+    <h1 class="titol">Seleccionar producte</h1>
+
+    <form class="producte-form">
+
+      <div class="selector-wrapper">
+        <div class="selector-box">
+
+          <!-- FILTRE TIPUS -->
+          <div class="field-block">
+            <label for="tipusSeleccionat" class="selector-label">
+              Filtrar per tipus
+            </label>
+
+            <select
+              id="tipusSeleccionat"
+              class="selector-select"
+              [(ngModel)]="tipusSeleccionat"
+              name="tipusSeleccionat"
+              (ngModelChange)="onTipusChange()">
+
+              <option [ngValue]="null">TOTS</option>
+
+              <option *ngFor="let t of tipusProducte" [ngValue]="t">
+                {{ t.nomTipus }}
+              </option>
+            </select>
+          </div>
+
+          <!-- ESPAI VISUAL -->
+          <div class="divider-space"></div>
+
+          <!-- SELECT PRODUCTE -->
+          <div class="field-block">
+            <label for="producteSeleccionat" class="selector-label">
+              Selecciona un producte
+            </label>
+
+            <select
+              id="producteSeleccionat"
+              class="selector-select"
+              [(ngModel)]="producteSeleccionat"
+              name="producteSeleccionat">
+
+              <option [ngValue]="null" disabled>Tria un producte</option>
+
+              <option *ngFor="let p of productesFiltrats" [ngValue]="p">
+                {{ p.nomProducte }}
+              </option>
+            </select>
+
+            <div class="hint" *ngIf="productesFiltrats.length === 0">
+              No hi ha productes per aquest tipus.
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- TARGETA RESUM -->
+      <div class="preview-wrapper" *ngIf="producteSeleccionat">
+        <div class="preview-card">
+
+          <div class="preview-image" *ngIf="imatgeProducteSeleccionat">
+            <img [src]="imatgeProducteSeleccionat" alt="Imatge producte" />
+          </div>
+
+          <div class="preview-main">
+            <div class="preview-name">
+              {{ producteSeleccionat.nomProducte }}
+            </div>
+            <div class="preview-type">
+              {{ producteSeleccionat.nomTipus || 'Sense tipus' }}
+            </div>
+          </div>
+
+          <div class="preview-meta">
+            <div class="preview-row">
+              <span class="label">Preu venda:</span>
+              <span class="value">{{ producteSeleccionat.preuVenta | number:'1.2-2' }} €</span>
+            </div>
+            <div class="preview-row">
+              <span class="label">Preu compra:</span>
+              <span class="value">{{ producteSeleccionat.preuCompra | number:'1.2-2' }} €</span>
+            </div>
+            <div class="preview-row">
+              <span class="label">Estoc:</span>
+              <span class="value">{{ producteSeleccionat.estoc }}</span>
+            </div>
+            <div class="preview-row">
+              <span class="label">Mínim estoc:</span>
+              <span class="value">{{ producteSeleccionat.minimEstoc }}</span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- BOTONS -->
+      <div class="form-actions">
+        <button class="primary-btn" type="button" (click)="continuar()" [disabled]="!producteSeleccionat">
+          Modificar
+        </button>
+
+        <button class="secondary-btn" type="button" (click)="cancelLar()" [disabled]="!producteSeleccionat">
+          Netejar selecció
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

@@ -1,243 +1,223 @@
-.comanda-express {
-  position: absolute;
-  top: 20px;
-  left: 50px;
-  background-color: #f4f4f4;
-  border: 2px solid black;
-  padding: 20px;
-  z-index: 1000;
+$green: #075b2f;
+$bg-panel: #d0f0d0;
+$shadow-sm: 0 3px 8px rgba(0,0,0,.12);
+$green-dark: darken($green, 10%);
+
+:host {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  font-family: Arial, sans-serif;
-}
-@media (max-width: 1000px), (max-height: 700px) {
-  .comanda-express {
-    width: 300px;
-    height: 300px;
-    padding: 10px;
-    font-size: 14px;
-    z-index: 1;
-  }
-
-
+  min-height: 100vh;
+  background-color: $bg-panel;
+  padding: 1.5rem 0;
+  box-sizing: border-box;
 }
 
-.pla-general{
-  height: 100vh;
+/* CONTENIDOR GENERAL TAULES */
+.pla-general {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); // 4+/fila en desktop
+  gap: 1rem;
+  width: min(1100px, 100% - 2rem);
+  margin: 0 auto;
+  justify-items: center; // centrar cada taula
+}
+
+.taules {
+  cursor: pointer;
+  width: 100%;
+  max-width: 220px;
+}
+
+.taules.taula-simple .taula-img {
+  transform: scale(1.6);
+  transform-origin: center;
+}
+
+.taules.taula-separada .subtaula-img {
+  transform: scale(1.1);
+  transform-origin: center;
+}
+
+.taula-wrapper {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 12px;
   overflow: hidden;
-  display: grid;
-  grid-template-rows: 1fr 2px 1fr;
-}
-
-.part-superior{
-  grid-row: 1;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-}
-
-.part-superior-esquerra{
-  grid-column: 2;
-  margin-left: 250px;
-
-}
-
-.part-superior-dreta{
-
-  grid-column: 3;
-  margin-left: 150px;
-
-}
-
-.part-inferior{
-
-  grid-row: 2;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-
-}
-
-.part-inferior-dreta{
-
-  grid-column: 3;
-  margin-left: 150px;
-}
-
-.taula{
-
-  padding: 20px;
-
-}
-
-.linia-negra {
-  height: 2px;
-  background-color: black;
-  margin: -10px 0 0 auto;
-  width: 50%;
-  display: block;
-
-
-}
-
-
-
-.obrir-barra {
+  background-color: transparent;
+  box-shadow: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  grid-column: span 2;
-  position: fixed;
-  background-color: lightgreen;
-  height: 100px;
-  width: 40%;
-  font-size: 38px;
-  padding: 10px;
-  text-align: center;
-  cursor: pointer;
-  margin-left: 10px;
-  margin-top: 150px;
-  border: none;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-  z-index: 9999;
-  transition: background-color 0.2s ease, transform 0.1s ease;
-
-  &:active {
-    transform: translateY(1px);
-  }
-  &:hover {
-    opacity: 0.8;
-  }
 }
 
-
-
-.modal-productes {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  width: 70vw; /* més gran */
-  height: 80vh;
-  transform: translate(-50%, -50%);
-  border-radius: 12px;
-  box-shadow: 0px 10px 30px rgba(0, 0, 0, 0.3);
-  z-index: 10000;
-  overflow: auto;
-  cursor: default;
-
-  &.header{
-    background: #007bff;
-    color: white;
-    padding: 10px;
-    font-weight: bold;
-    cursor: move; /* cursor de drag */
-    border-top-left-radius: 12px;
-    border-top-right-radius: 12px;
-    user-select: none;
-  }
+.taula-img,
+.subtaula-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
 }
 
-.modal-backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.4);
-  z-index: 9999;
-}
-
-.modal-barra-comandes{
-  z-index: 99999;
-}
-
-
-/* Estil per al contenidor de confirmació */
-.confirmacio-cobrar {
-  /* Caixa centrada i amb aparença de modal */
-  position: fixed;
-  top: 50%;
+.taula-id,
+.subtaula-id,
+.subtaula-idParent {
+  position: absolute;
+  top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-  padding: 24px;
-  width: 320px;
-  max-width: 90%;
-  z-index: 10001;
+  font-weight: 800;
+  text-shadow: 0 1px 3px rgba(0,0,0,0.45);
+  color: #fff;
+}
 
+.taula-id {
+  font-size: 1.4rem;
+}
+
+.subtaula-id {
+  font-size: 1.2rem;
+}
+
+.subtaula-idParent {
+  font-size: 1rem;
+  top: 65%;
+}
+
+/* SUBTAULES DINS UNA TAULA SEPARADA */
+.subtaules {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  padding: 0.35rem;
+  gap: 0.35rem;
+}
+
+.subtaula {
+  position: relative;
+  flex: 1 1 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- ACCIONS TAULA (BOTONS) ---------- */
+
+.accions-taula {
+  margin-top: 1.25rem;
+  margin-bottom: 2rem;
+  padding: 1.5rem 1rem 2rem;
+  width: min(1100px, 100% - 2rem);
+  margin-inline: auto;
+  background-color: rgba(255, 255, 255, 0.7);
+  border-radius: 16px;
+  box-shadow: $shadow-sm;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+  gap: 0.75rem;
+}
 
-  > span {
-    font-size: 1.125rem;
-    font-weight: 600;
-    margin-bottom: 20px;
-    color: #333333;
+.accions-taula h3 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.6rem;
+}
+
+/* Contenidor dels botons: en fila */
+.botons {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.25rem;
+}
+
+/* Botó d’opció */
+.botoOpcio {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 56px;
+  padding: 0 16px;
+  color: $green-dark;
+  background-color: #fff;
+  font-weight: 800;
+  font-size: 15px;
+  border: 2px solid $green;
+  border-radius: 14px;
+  box-shadow: $shadow-sm;
+  cursor: pointer;
+  transition: transform .12s ease, box-shadow .12s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(0,0,0,.18);
   }
 
-  .boto-container {
-    display: flex;
-    gap: 12px;
+  &:active:not(:disabled) {
+    transform: translateY(0);
+    box-shadow: inset 0 2px 6px rgba(0,0,0,.2);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: default;
+    transform: none;
+    box-shadow: $shadow-sm;
+  }
+
+  span {
+    pointer-events: none;
+  }
+}
+
+/* ---------- RESPONSIVE ---------- */
+
+/* Tablet: més petites */
+@media (max-width: 900px) {
+  .pla-general {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 0.75rem;
+  }
+
+
+  .accions-taula {
+    width: min(900px, 100% - 1.5rem);
+  }
+}
+
+/* Mòbil petit → 2 per fila i botons en columna */
+@media (max-width: 600px) {
+  .pla-general {
+    grid-template-columns: repeat(2, minmax(110px, 1fr));
     width: 100%;
-    justify-content: space-between;
+    padding-inline: 0.5rem;
   }
 
-  button {
-    flex: 1;
-    padding: 10px 0;
-    font-size: 0.975rem;
-    font-weight: 500;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-
-    &:active {
-      transform: translateY(1px);
-    }
+  .taules {
+    max-width: 140px;
   }
 
-  .botoEfectiu {
-    background-color: #28a745;
-    color: #ffffff;
-
-    &:hover {
-      background-color: darken(#28a745, 8%);
-    }
+  .accions-taula {
+    width: 100%;
+    margin-inline: 0;
+    border-radius: 0;
   }
 
-  .botoTargeta {
-    background-color: #007bff;
-    color: #ffffff;
-
-    &:hover {
-      background-color: darken(#007bff, 8%);
-    }
+  .botons {
+    flex-direction: column;
+    align-items: stretch;
   }
 
-  .botoCancelar {
-    background-color: transparent;
-    color: #555555;
-    border: 1px solid #cccccc;
-
-    &:hover {
-      background-color: #f2f2f2;
-    }
+  .botoOpcio {
+    width: 100%;
+    justify-content: center;
   }
 }
-
-.backdrop {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 10000;
-}
-
 

@@ -1,0 +1,163 @@
+<div class="config-wrapper">
+
+  <button class="back-btn" (click)="tornarEnrere()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <div class="config-panel">
+    <h1 class="titol">Gestionar taules</h1>
+
+    <form class="taula-form">
+
+      <div class="selector-taula">
+        <label for="taulaSelect" class="selector-label">
+          Taula que vols gestionar
+        </label>
+
+        <select
+          id="taulaSelect"
+          name="taulaSelect"
+          class="selector-combo"
+          [(ngModel)]="taulaSeleccionada"
+          (ngModelChange)="onCanviTaula($event)">
+          <option [ngValue]="null" disabled>Selecciona una taula</option>
+          <option
+            *ngFor="let taula of taules"
+            [ngValue]="taula">
+            Taula {{ taula.numTaula }}
+            ({{ taula.interiorexterior === 'I' ? 'Interior' : 'Terrassa' }})
+          </option>
+        </select>
+      </div>
+
+      <div *ngIf="mostrarDetall" class="detall-container">
+
+        <!-- capçalera amb taula seleccionada -->
+        <div class="header-row">
+          <div class="taula-info">
+            <span class="label">Taula seleccionada</span>
+            <span class="nom">
+              Taula {{ taulaSeleccionada?.numTaula }}
+              ({{ ubicacio === 'INTERIOR' ? 'Interior' : 'Terrassa' }})
+            </span>
+          </div>
+        </div>
+
+        <div class="form-grid">
+
+          <!-- 🔢 Número de taula -->
+          <div class="form-field form-field-full num-taula-field" (click)="obrirTeclat()">
+            <label for="numTaula">Número de taula</label>
+            <input
+              id="numTaula"
+              name="numTaula"
+              type="text"
+              [value]="numTaula !== null ? numTaula : ''"
+              placeholder="Toca per introduir el número"
+              readonly />
+          </div>
+
+          <!-- Ubicació -->
+          <div class="form-field form-field-full">
+            <label for="ubicacioTaula">Ubicació de la taula</label>
+            <select
+              id="ubicacioTaula"
+              name="ubicacioTaula"
+              [(ngModel)]="ubicacio">
+              <option [ngValue]="null">Selecciona una opció</option>
+              <option value="INTERIOR">Interior</option>
+              <option value="TERRASSA">Terrassa</option>
+            </select>
+          </div>
+
+          <!-- Té sub-taules -->
+          <div class="form-field form-field-full checkbox-field">
+            <label for="teSubtaules">Té sub-taules?</label>
+            <div class="checkbox-inline">
+              <input
+                id="teSubtaules"
+                name="teSubtaules"
+                type="checkbox"
+                [disabled]="ubicacio === 'TERRASSA'"
+                [(ngModel)]="teSubtaules" />
+            </div>
+          </div>
+
+          <div class="form-field form-field-full checkbox-field">
+            <label for="actiu">Taula activa?</label>
+            <div class="checkbox-inline">
+              <input
+                id="actiu"
+                name="actiu"
+                type="checkbox"
+                [(ngModel)]="actiu" />
+            </div>
+          </div>
+
+        </div>
+
+        <!-- BOTONS ACCIÓ -->
+        <div class="form-actions">
+
+          <button class="primary-btn" type="button" (click)="guardarCanvis()">
+            Modificar
+          </button>
+
+          <button class="danger-btn" type="button" (click)="mostraConfirmacioEliminar = true">
+            Esborrar
+          </button>
+
+          <button class="secondary-btn" type="button" (click)="cancelLar()">
+            Cancel·lar
+          </button>
+
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- POPUP CONFIRMACIÓ ESBORRAR TAULA -->
+  <div class="overlay" *ngIf="mostraConfirmacioEliminar">
+    <div class="overlay-backdrop" (click)="mostraConfirmacioEliminar = false"></div>
+
+    <div class="overlay-panel confirm-panel">
+      <h2 class="confirm-title">Estàs segur d'esborrar aquesta taula?</h2>
+      <p class="confirm-text">
+        Taula {{ taulaSeleccionada?.numTaula }}
+        ({{ ubicacio === 'INTERIOR' ? 'Interior' : 'Terrassa' }})
+      </p>
+
+      <div class="confirm-actions">
+        <button
+          type="button"
+          class="danger-btn"
+          (click)="eliminarTaula()">
+          Esborrar
+        </button>
+
+        <button
+          type="button"
+          class="secondary-btn"
+          (click)="mostraConfirmacioEliminar = false">
+          Cancel·lar
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🔢 OVERLAY TECLAT NUMÈRIC -->
+  <div class="overlay" *ngIf="mostrarTeclat">
+    <div class="overlay-backdrop" (click)="tancarTeclat()"></div>
+
+    <div class="overlay-panel">
+      <app-teclat-numeric
+        [title]="teclatTitle"
+        [initialValue]="valorTeclatInicial"
+        (ok)="onTeclatOk($event)"
+        (close)="tancarTeclat()">
+      </app-teclat-numeric>
+    </div>
+  </div>
+
+</div>

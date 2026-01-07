@@ -1,0 +1,81 @@
+<div class="config-wrapper">
+
+  <button class="back-btn" (click)="tornarEnrere()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <div class="config-panel">
+    <h1 class="titol">Crear taula</h1>
+
+    <form class="taula-form">
+
+      <div class="form-grid">
+
+        <!-- 🔢 Número de taula -->
+        <div class="form-field form-field-full num-taula-field" (click)="obrirTeclat()">
+          <label for="numTaula">Número de taula</label>
+          <input
+            id="numTaula"
+            name="numTaula"
+            type="text"
+            [value]="numTaula !== null ? numTaula : ''"
+            placeholder="Toca per introduir el número"
+            readonly />
+        </div>
+
+        <div class="form-field form-field-full">
+          <label for="ubicacioTaula">Ubicació de la taula</label>
+          <select
+            id="ubicacioTaula"
+            name="ubicacioTaula"
+            [(ngModel)]="ubicacio">
+            <option [ngValue]="null">Selecciona una opció</option>
+            <option value="INTERIOR">Interior</option>
+            <option value="TERRASSA">Terrassa</option>
+          </select>
+        </div>
+
+        <!-- Checkbox té sub-taules -->
+        <div class="form-field form-field-full checkbox-field">
+          <label for="teSubtaules">Té sub-taules?</label>
+          <div class="checkbox-inline">
+            <input
+              id="teSubtaules"
+              name="teSubtaules"
+              type="checkbox"
+              [disabled]="ubicacio === 'TERRASSA'"
+              [(ngModel)]="teSubtaules" />
+          </div>
+        </div>
+
+      </div>
+
+      <!-- botons al mateix lloc que crear-producte / crear-tipus -->
+      <div class="form-actions">
+        <button class="primary-btn" type="button" (click)="guardarTaula()">
+          Desar taula
+        </button>
+
+        <button class="secondary-btn" type="button" (click)="netejarTaula()">
+          Netejar
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- 🔢 OVERLAY TECLAT NUMÈRIC -->
+  <div class="overlay" *ngIf="mostrarTeclat">
+    <div class="overlay-backdrop" (click)="tancarTeclat()"></div>
+
+    <div class="overlay-panel">
+      <app-teclat-numeric
+        [title]="teclatTitle"
+        [initialValue]="valorTeclatInicial"
+        (ok)="onTeclatOk($event)"
+        (close)="tancarTeclat()">
+      </app-teclat-numeric>
+    </div>
+  </div>
+
+</div>

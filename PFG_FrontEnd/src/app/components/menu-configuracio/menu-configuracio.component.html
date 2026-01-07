@@ -1,0 +1,40 @@
+<div class="config-wrapper">
+
+  <button class="back-btn" (click)="tornarEnrere()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <div class="config-panel">
+    <h1 class="titol">Configuració</h1>
+
+    <div class="config-grid">
+
+      <button
+        class="botoOpcio"
+        routerLink="/config/selector-productes">
+        <span>Productes</span>
+      </button>
+
+      <!-- Taules -->
+      <button
+        class="botoOpcio"
+        routerLink="/config/selector-taula">
+        <span>Taules</span>
+      </button>
+
+      <!-- Tipus -->
+      <button
+        class="botoOpcio"
+        routerLink="/config/selector-tipus">
+        <span>Tipus Producte</span>
+      </button>
+      <!-- Menus -->
+      <button
+        class="botoOpcio"
+        routerLink="/config/selector-menu">
+        <span>Menus</span>
+      </button>
+
+    </div>
+  </div>
+</div>

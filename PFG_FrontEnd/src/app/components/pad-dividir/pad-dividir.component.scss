@@ -1,0 +1,187 @@
+.number-pad-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 20px;
+}
+
+.number-pad {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  padding: 30px;
+  max-width: 400px;
+  width: 100%;
+
+  .title {
+    text-align: center;
+    color: #333;
+    margin-bottom: 25px;
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  .buttons-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 20px;
+
+    button {
+      height: 60px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      background: white;
+      font-size: 1.2rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        border-color: #007bff;
+        background-color: #f8f9fa;
+        transform: translateY(-2px);
+      }
+
+      &.active {
+        background-color: #007bff;
+        color: white;
+        border-color: #007bff;
+        transform: translateY(-1px);
+      }
+
+      &:active {
+        transform: translateY(0);
+      }
+    }
+
+    .number-btn { color: #333; }
+
+    .fraction-btn {
+      color: #6c757d;
+      font-size: 1rem;
+
+      &:hover {
+        border-color: #28a745;
+        color: #28a745;
+      }
+
+      &.active {
+        background-color: #28a745;
+        border-color: #28a745;
+        color: white;
+      }
+    }
+  }
+
+  .selected-value {
+    text-align: center;
+    padding: 15px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    color: #495057;
+
+    .value {
+      font-weight: bold;
+      color: #007bff;
+      font-size: 1.3rem;
+    }
+  }
+}
+
+.pad-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.close-btn {
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: .25rem .5rem;
+}
+.close-btn:hover { opacity: .8; }
+
+.pad-subtitle {
+  margin: 10px 16px 16px;
+  color: #6b7280;
+  font-size: .95rem;
+}
+
+.pad-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 16px;
+  padding: 0 16px 12px;
+
+  .clear-btn,
+  .confirm-btn {
+    border: 0;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: transform .08s ease, opacity .12s ease, background-color .12s ease;
+  }
+
+  .clear-btn {
+    background: #eef2ff;
+    color: #1e3a8a;
+  }
+  .clear-btn:hover { background: #e0e7ff; }
+
+  .confirm-btn {
+    background: #22c55e;
+    color: #fff;
+  }
+  .confirm-btn:hover { background: #16a34a; }
+  .confirm-btn:disabled {
+    opacity: .6;
+    cursor: not-allowed;
+  }
+}
+
+/* posa el botó ← al centre de la fila */
+.buttons-grid .backspace { grid-column: 2; }
+
+/* estil del botó d’esborrar */
+.tool-btn.backspace {
+  height: 60px;
+  border: 2px solid #e0e0e0;
+  border-radius: 8px;
+  background: white;
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s ease;
+
+  &:hover { border-color: #ef4444; background-color: #fff1f2; transform: translateY(-2px); }
+  &:active { transform: translateY(0); }
+  &:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .number-pad {
+    padding: 20px;
+
+    .buttons-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+
+      button {
+        height: 50px;
+        font-size: 1rem;
+      }
+      /* eliminat el centrat del 10è element (0) */
+    }
+  }
+}

@@ -1,0 +1,222 @@
+<div class="dividir-compte-container">
+  <div class="header-info">
+    <div class="comanda-info">
+      <h2>Divisió de compte - Comanda #{{ comanda?.idComanda }}</h2>
+      <p>{{ comanda?.nomClient }} | Comensals: {{ comensales }}</p>
+      <p class="data">{{ comanda?.dataComanda }}</p>
+    </div>
+    <div class="totals-info">
+      <div class="total-general">
+        <span>Total: {{ totalComanda | number: '1.2-2' }} €</span>
+      </div>
+      <div class="total-pagado">
+        <span>Pagat: {{ totalPagat | number:'1.2-2' }} €</span>
+      </div>
+      <div class="total-pendiente">
+        <span>Pendent: {{ totalPendent | number:'1.2-2' }} €</span>
+      </div>
+      <div class="actions-header">
+        <button
+          class="btn-primari"
+          [disabled]="!ProductesPendentPagament.length"
+          (click)="pagarTotaComanda(); totPagat = true"
+        >
+          Pagar tot
+        </button>
+        <button
+          class="btn-secundari"
+          [disabled]="!ProductesPendentPagament.length"
+          (click)="dividirComanda()"
+        >
+          Partir comanda
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="progres-pagament">
+    <div class="barra-progres">
+      <div class="progres-fill" [style.width.%]="porcentatgePagat"></div>
+    </div>
+    <span class="porcentatge">
+      {{ porcentatgePagat | number:'1.1-1' }}% pagat
+    </span>
+  </div>
+
+  <div class="contingut-principal">
+    <div class="columna-pendent">
+      <h3 class="titol-columna">
+        Pendent de pagar
+      </h3>
+
+      <div class="producte-llista" *ngIf="ProductesPendentPagament.length > 0; else noPendent">
+        <div class="producte-item" *ngFor="let producte of ProductesPendentPagament">
+          <div class="producte-info">
+            <h4>{{ producte.nomProducte }}</h4>
+            <div class="producte-detalls">
+              <span class="preu">{{ producte.preuUnitari | number:'1.2-2' }} € p/ud</span>
+              <span class="quantitat">{{ producte.unitats }} unitats</span>
+              <span class="total">{{ producte.total | number:'1.2-2' }} €</span>
+            </div>
+          </div>
+          <button class="btn-pagar-producte" (click)="pagarProducto(producte)">
+            Pagar
+          </button>
+        </div>
+      </div>
+
+      <ng-template #noPendent>
+        <div class="no-productes">
+          <p>Cap producte pendent de pagar</p>
+        </div>
+      </ng-template>
+    </div>
+
+    <div class="columne-pagats">
+      <h3 class="titol-columna">
+        Pagat
+      </h3>
+
+      <div class="producte-llista" *ngIf="ProductesPagats.length > 0; else noPagats">
+        <div class="producte-item" *ngFor="let producte of ProductesPagats">
+          <div class="producte-info">
+            <h4>{{ producte.nomProducte }}</h4>
+            <div class="producte-detalls">
+              <span class="preu">{{ producte.preuUnitari | number:'1.2-2' }} € p/ud</span>
+              <span class="quantitat">{{ producte.unitats }} unitats</span>
+              <span class="total">{{ producte.total | number:'1.2-2' }} €</span>
+            </div>
+          </div>
+          <div class="estat-pagat">
+            <span class="check">✓</span>
+          </div>
+        </div>
+      </div>
+
+      <ng-template #noPagats>
+        <div class="no-productes">
+          <p>No hi ha cap producte pagat</p>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="footer-accions">
+    <button class="btn-seguir" (click)="seguirAfegintProducte()">
+      <span class="plus">＋</span>
+      Afegir producte
+    </button>
+    <button
+      class="btn-seguir complet"
+      *ngIf="totalPendent <= 0"
+      (click)="finalitzarPagament('EfectiuTargeta')"
+    >
+      Tancar comanda
+    </button>
+  </div>
+
+  <div *ngIf="mostrarpad" class="pad-overlay">
+    <app-pad-dividir
+      [producte]="producteSeleccionat"
+      [allowFractions]="UseFraccions"
+      (close)="mostrarpad = false"
+      (confirmed)="onPadConfirmed($event)"
+    >
+    </app-pad-dividir>
+  </div>
+
+  <div *ngIf="mostrarPagament" class="pay-overlay">
+    <div class="pay-card">
+      <div class="pay-header">
+        <h3>Pagament</h3>
+        <button class="close-btn" (click)="cancelarPagament()" aria-label="Tancar">
+          &times;
+        </button>
+      </div>
+
+      <div class="pay-body">
+        <div class="resume">
+          <div class="line">
+            <span>Producte</span>
+            <strong>{{ producteSeleccionat?.nomProducte }}</strong>
+          </div>
+          <div class="line">
+            <span>Import a cobrar</span>
+            <strong>{{ importACobrar | number:'1.2-2' }} €</strong>
+          </div>
+        </div>
+
+        <div class="method">
+          <label class="method-item">
+            <input type="radio" name="metode" [(ngModel)]="metodePagament" value="targeta" />
+            <span>Targeta</span>
+          </label>
+          <label class="method-item">
+            <input type="radio" name="metode" [(ngModel)]="metodePagament" value="efectiu" />
+            <span>Efectiu</span>
+          </label>
+        </div>
+
+        <div class="cash-box" *ngIf="metodePagament === 'efectiu'">
+          <label class="cash-label">Quantitat pagada</label>
+
+          <!-- ✅ Input tipus text (no number), i obre teclat al click -->
+          <div class="cash-input">
+            <input
+              type="text"
+              inputmode="decimal"
+              [value]="(efectiuPagat ?? 0) | number:'1.2-2'"
+              placeholder="0.00"
+              readonly
+              (click)="showTeclat = true"
+            />
+          </div>
+
+          <!-- ✅ Quick buttons en 2 línies -->
+          <div class="quick-grid">
+            <button type="button" (click)="setQuick(0.05)">0.05</button>
+            <button type="button" (click)="setQuick(0.10)">0.10</button>
+            <button type="button" (click)="setQuick(0.20)">0.20</button>
+            <button type="button" (click)="setQuick(0.50)">0.50</button>
+            <button type="button" (click)="setQuick(1)">1</button>
+
+            <button type="button" (click)="setQuick(2)">2</button>
+            <button type="button" (click)="setQuick(5)">5</button>
+            <button type="button" (click)="setQuick(10)">10</button>
+            <button type="button" (click)="setQuick(20)">20</button>
+            <button type="button" (click)="setQuick(50)">50</button>
+          </div>
+
+          <div class="change" [class.negatiu]="canvi < 0">
+            <span>Canvi</span>
+            <strong>{{ canvi | number:'1.2-2' }} €</strong>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="pay-footer">
+        <button class="btn-cancel" (click)="cancelarPagament()">
+          Cancel·lar
+        </button>
+        <button
+          class="btn-confirm"
+          [disabled]="!potConfirmarPagament"
+          (click)="confirmarPagament()"
+        >
+          Confirmar pagament
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="showTeclat" class="pay-overlay">
+    <app-teclat-numeric
+      [title]="'Introdueix import' + (metodePagament === 'efectiu' ? ' (efectiu)' : ' (targeta)')"
+      [initialValue]="efectiuPagat"
+      (ok)="onTeclatOk($event)"
+      (close)="showTeclat = false"
+    >
+    </app-teclat-numeric>
+  </div>
+</div>

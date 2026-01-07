@@ -1,4 +1,50 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #d0f0d0;
+}
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+/* WARNING (groc) */
+.snackbar-warning .mdc-snackbar__surface {
+  background-color: #ff9800 !important;
+  color: #000 !important;            /* text principal */
+}
+
+.snackbar-warning .mdc-button__label {
+  color: #000 !important;            /* text "Tancar" en negre */
+}
+
+/* SUCCESS (verd) */
+.snackbar-success .mdc-snackbar__surface {
+  background-color: #4caf50 !important;
+  color: #fff !important;
+}
+
+.snackbar-success .mdc-button__label {
+  color: #fff !important;            /* "Tancar" en blanc */
+}
+
+/* ERROR (vermell) */
+.snackbar-error .mdc-snackbar__surface {
+  background-color: #f44336 !important;
+  color: #fff !important;
+}
+
+.snackbar-error .mdc-button__label {
+  color: #fff !important;
+}
+
+/* INFO (blau) */
+.snackbar-info .mdc-snackbar__surface {
+  background-color: #2196f3 !important;
+  color: #fff !important;
+}
+
+.snackbar-info .mdc-button__label {
+  color: #fff !important;
+}
+

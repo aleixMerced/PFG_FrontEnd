@@ -1,0 +1,134 @@
+<div class="config-wrapper">
+
+  <button class="back-btn" (click)="tornarEnrere()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <div class="config-panel">
+    <h1 class="titol">Gestionar tipus</h1>
+
+    <form class="tipus-form">
+
+      <!-- 1️⃣ PRIMER: NOMÉS EL SELECTOR -->
+      <div class="selector-tipus">
+        <label for="tipusSelect" class="selector-label">
+          Tipus que vols gestionar
+        </label>
+
+        <select
+          id="tipusSelect"
+          name="tipusSelect"
+          class="selector-combo"
+          [(ngModel)]="tipusSeleccionat"
+          (ngModelChange)="onCanviTipus($event)">
+          <option [ngValue]="null" disabled>Selecciona un tipus</option>
+          <option
+            *ngFor="let tipus of tipusProductes"
+            [ngValue]="tipus">
+            {{ tipus.nomTipus }}
+          </option>
+        </select>
+      </div>
+
+      <!-- 2️⃣ DETALLS NOM + IMATGE + BOTONS (NOMÉS QUAN JA HI HA TIPUS) -->
+      <div *ngIf="mostrarDetall" class="detall-container">
+
+        <!-- capçalera amb tipus seleccionat i botó canviar -->
+        <div class="header-row">
+          <div class="tipus-info">
+            <span class="label">Tipus seleccionat</span>
+            <span class="nom">
+              {{ tipusSeleccionat?.nomTipus }}
+            </span>
+          </div>
+
+
+        </div>
+
+        <div class="form-grid">
+          <div class="form-field form-field-full">
+            <label for="nomTipus">Nom del tipus</label>
+            <input
+              id="nomTipus"
+              name="nomTipus"
+              [(ngModel)]="nomTipus"
+              type="text"
+              maxlength="50"
+              required />
+          </div>
+
+          <div class="form-field form-field-full">
+            <label for="imatgeTipus">Imatge del tipus</label>
+
+            <div class="imatge-grid">
+              <!-- preview -->
+              <div class="imatge-preview" *ngIf="imatgeUrl">
+                <img [src]="imatgeUrl" alt="Imatge tipus" />
+              </div>
+
+              <div class="file-input-wrapper">
+                <input
+                  id="imatgeTipus"
+                  name="imatgeTipus"
+                  type="file"
+                  accept="image/*"
+                  (change)="onImatgeSeleccionada($event)" />
+
+                <span class="file-input-label">
+                  {{ nomImatge || 'Canvia la imatge del tipus' }}
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- BOTONS ACCIÓ -->
+        <div class="form-actions">
+
+          <button class="primary-btn" type="button" (click)="guardarCanvis()">
+            Modificar
+          </button>
+
+          <button class="danger-btn" type="button" (click)="mostraConfirmacioEliminar = true">
+            Esborrar
+          </button>
+
+          <button class="secondary-btn" type="button" (click)="cancelLar()">
+            Cancel·lar
+          </button>
+
+        </div>
+      </div>
+
+    </form>
+  </div>
+
+  <!-- POPUP CONFIRMACIÓ ESBORRAR TIPUS -->
+  <div class="overlay" *ngIf="mostraConfirmacioEliminar">
+    <div class="overlay-backdrop" (click)="mostraConfirmacioEliminar = false"></div>
+
+    <div class="overlay-panel confirm-panel">
+      <h2 class="confirm-title">Estàs segur d'esborrar aquest tipus?</h2>
+      <p class="confirm-text">
+        {{ tipusSeleccionat?.nomTipus }}
+      </p>
+
+      <div class="confirm-actions">
+        <button
+          type="button"
+          class="danger-btn"
+          (click)="eliminarTipus()">
+          Esborrar
+        </button>
+
+        <button
+          type="button"
+          class="secondary-btn"
+          (click)="mostraConfirmacioEliminar = false">
+          Cancel·lar
+        </button>
+      </div>
+    </div>
+  </div>
+
+</div>

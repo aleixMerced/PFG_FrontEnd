@@ -1,0 +1,141 @@
+<div class="config-wrapper">
+
+  <button class="back-btn" (click)="tornarEnrere()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <div class="config-panel">
+    <h1 class="titol">Crear producte</h1>
+
+    <form class="producte-form">
+
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="nomProducte">Nom del producte</label>
+          <input
+            id="nomProducte"
+            name="nomProducte"
+            [(ngModel)]="nomProducte"
+            type="text"
+            maxlength="10"
+            required />
+        </div>
+
+        <div class="form-field">
+          <label for="tipusProducte">Tipus de producte</label>
+          <select
+            id="tipusProducte"
+            name="tipusProducte"
+            [disabled]="tipusBloquejat"
+            [(ngModel)]="tipusSeleccionat">
+
+            <option [ngValue]="null" disabled>Selecciona un tipus</option>
+
+            <option
+              *ngFor="let tipus of tipusProductes"
+              [ngValue]="tipus">
+              {{ tipus.nomTipus }}
+            </option>
+          </select>
+        </div>
+
+        <div class="form-field">
+          <label for="preuVenda">Preu de venda (€)</label>
+          <input
+            id="preuVenda"
+            name="preuVenda"
+            type="text"
+            [value]="preuVenda ?? ''"
+            readonly
+            (click)="obrirTeclat('preuVenda')" />
+        </div>
+
+        <div class="form-field">
+          <label for="preuCompra">Preu de compra (€)</label>
+          <input
+            id="preuCompra"
+            name="preuCompra"
+            type="text"
+            [value]="preuCompra ?? ''"
+            readonly
+            (click)="obrirTeclat('preuCompra')" />
+        </div>
+
+        <div class="form-field">
+          <label for="estoc">Estoc</label>
+          <input
+            id="estoc"
+            name="estoc"
+            type="text"
+            [value]="estoc ?? ''"
+            readonly
+            (click)="obrirTeclat('estoc')" />
+        </div>
+
+        <div class="form-field">
+          <label for="minimEstoc">Mínim d'estoc</label>
+          <input
+            id="minimEstoc"
+            name="minimEstoc"
+            type="text"
+            [value]="minimEstoc ?? ''"
+            readonly
+            (click)="obrirTeclat('minimEstoc')" />
+        </div>
+
+        <div class="form-field form-field-full">
+          <label for="imatgeProducte">Imatge del producte</label>
+
+          <div class="imatge-grid">
+            <!-- previsualització si hi ha imatge -->
+            <div class="imatge-preview" *ngIf="imatgeUrl">
+              <img [src]="imatgeUrl" alt="Imatge producte" />
+            </div>
+
+            <!-- input de fitxer -->
+            <div class="file-input-wrapper" [class.with-image]="imatgeUrl">
+              <input
+                id="imatgeProducte"
+                name="imatgeProducte"
+                type="file"
+                accept="image/*"
+                (change)="onImatgeSeleccionada($event)" />
+
+              <span class="file-input-label">
+                {{ nomImatge || 'Tria una imatge pel producte' }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+
+      </div>
+
+      <div class="form-actions">
+        <button class="primary-btn" type="button" (click)="guardarProducte()">
+          Desar producte
+        </button>
+
+        <button class="secondary-btn" type="button" routerLink="/config/productes" (click)="netejarProducte()">
+          Netejar
+        </button>
+
+      </div>
+
+    </form>
+  </div>
+
+  <div class="overlay" *ngIf="mostraTeclat">
+    <div class="overlay-backdrop" (click)="tancarTeclat()"></div>
+
+    <div class="overlay-panel">
+      <app-teclat-numeric
+        [title]="teclatTitle"
+        [initialValue]="valorTeclatInicial"
+      (ok)="onTeclatOk($event)"
+      (close)="tancarTeclat()">
+      </app-teclat-numeric>
+    </div>
+  </div>
+
+</div>

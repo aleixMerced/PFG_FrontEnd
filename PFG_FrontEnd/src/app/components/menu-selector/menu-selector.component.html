@@ -1,0 +1,263 @@
+<div class="menu-selector-overlay">
+  <div class="menu-selector-box">
+
+    <button class="close-btn" (click)="onTancar()">&times;</button>
+
+    <div class="header">
+      <div class="title">
+        {{ menuProducte?.nomProducte }}
+      </div>
+    </div>
+
+    <div class="body" *ngIf="!carregant && !errorCarrega; else estatCarrega">
+
+      <!-- ✅ MIG MENÚ: llista única + quantitat per plat -->
+      <div class="selectors" *ngIf="migMenu === 'mig' && !esView">
+
+        <div class="selector-block">
+          <div class="selector-header static" style="display:flex; align-items:center; gap:12px;">
+            <span class="selector-title">MIG MENÚ · ESCULL PLATS</span>
+          </div>
+
+          <div class="selector-col">
+            <div *ngIf="platsMigMenu.length > 0; else noPlatsMig">
+              <div
+                class="plat-item"
+                *ngFor="let plat of platsMigMenu"
+                [class.selected]="(plat.quantitat || 0) > 0">
+
+                <div class="fila-superior">
+                  <span class="nom">{{ plat.nomPlat }}</span>
+
+                  <!-- ✅ Controls quantitat per plat -->
+                  <div class="quantitat-controls">
+                    <button type="button" (click)="canviarQuantitatMig(plat,-1)">-</button>
+                    <span class="quantitat">{{ plat.quantitat || 0 }}</span>
+                    <button type="button" (click)="canviarQuantitatMig(plat,1)">+</button>
+                  </div>
+
+                  <button class="obs-btn"
+                          (click)="toggleObservacions(plat); $event.stopPropagation()">
+                    <mat-icon>chat_bubble_outline</mat-icon>
+                  </button>
+                </div>
+
+                <div class="fila-observacions" *ngIf="plat.mostrarObservacions">
+                  <input type="text"
+                         [(ngModel)]="plat.observacions"
+                         placeholder="Escriu observacions (poc fet, sense sal…)" />
+                </div>
+
+              </div>
+            </div>
+
+            <ng-template #noPlatsMig>
+              <div class="no-data">No hi ha plats disponibles.</div>
+            </ng-template>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ✅ MENÚ SENCER -->
+      <div class="selectors" *ngIf="migMenu === 'sencer' && !menuEspecial">
+
+        <!-- BLOC PRIMERS -->
+        <div class="selector-block">
+          <button class="selector-header" (click)="togglePrimers()">
+            <span class="selector-title">PRIMERS</span>
+            <span class="chevron" [class.open]="primersOberts">▾</span>
+          </button>
+
+          <div class="selector-col" *ngIf="primersOberts">
+            <div *ngIf="primers.length > 0; else noPrimers">
+              <div class="plat-item" *ngFor="let plat of primers">
+                <div class="fila-superior">
+                  <span class="nom">{{ plat.nomPlat }}</span>
+
+                  <div class="quantitat-controls" *ngIf="!esView">
+                    <button (click)="canviarQuantitat(plat,-1)">-</button>
+                    <span class="quantitat">{{ plat.quantitat }}</span>
+                    <button (click)="canviarQuantitat(plat,1)">+</button>
+                  </div>
+
+                  <button class="obs-btn" (click)="toggleObservacions(plat)" *ngIf="!esView">
+                    <mat-icon>chat_bubble_outline</mat-icon>
+                  </button>
+                </div>
+
+                <div class="fila-observacions" *ngIf="!esView && plat.mostrarObservacions">
+                  <input type="text" [(ngModel)]="plat.observacions"
+                         placeholder="Escriu observacions (poc fet, sense sal…)" />
+                </div>
+              </div>
+            </div>
+
+            <ng-template #noPrimers>
+              <div class="no-data">No hi ha primers definits per aquest menú.</div>
+            </ng-template>
+          </div>
+        </div>
+
+        <!-- BLOC SEGONS -->
+        <div class="selector-block">
+          <button class="selector-header" (click)="toggleSegons()">
+            <span class="selector-title">SEGONS</span>
+            <span class="chevron" [class.open]="segonsOberts">▾</span>
+          </button>
+
+          <div class="selector-col" *ngIf="segonsOberts">
+            <div *ngIf="segons.length > 0; else noSegons">
+              <div class="plat-item" *ngFor="let plat of segons">
+                <div class="fila-superior">
+                  <span class="nom">{{ plat.nomPlat }}</span>
+
+                  <div class="quantitat-controls" *ngIf="!esView">
+                    <button (click)="canviarQuantitat(plat,-1)">-</button>
+                    <span class="quantitat">{{ plat.quantitat }}</span>
+                    <button (click)="canviarQuantitat(plat,1)">+</button>
+                  </div>
+
+                  <button class="obs-btn" (click)="toggleObservacions(plat)" *ngIf="!esView">
+                    <mat-icon>chat_bubble_outline</mat-icon>
+                  </button>
+                </div>
+
+                <div class="fila-observacions" *ngIf="plat.mostrarObservacions">
+                  <input type="text" [(ngModel)]="plat.observacions"
+                         placeholder="Escriu observacions (poc fet, sense sal…)" />
+                </div>
+              </div>
+            </div>
+
+            <ng-template #noSegons>
+              <div class="no-data">No hi ha segons definits per aquest menú.</div>
+            </ng-template>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- ✅ MENÚ ESPECIAL (només sencer) -->
+      <div class="selectors" *ngIf="migMenu === 'sencer' && menuEspecial">
+
+        <!-- BLOC PRIMERS ESPECIALS -->
+        <div class="selector-block">
+          <button class="selector-header" (click)="togglePrimers()">
+            <span class="selector-title">PRIMERS ESPECIALS</span>
+            <span class="chevron" [class.open]="primersOberts">▾</span>
+          </button>
+
+          <div class="selector-col" *ngIf="primersOberts">
+            <div *ngIf="primers.length > 0; else noPrimers">
+              <div class="plat-item" *ngFor="let plat of primersEspecial">
+                <div class="fila-superior">
+                  <span class="nom">{{ plat.nomPlat }}</span>
+
+                  <div class="quantitat-controls" *ngIf="!esView">
+                    <button (click)="canviarQuantitat(plat,-1)">-</button>
+                    <span class="quantitat">{{ plat.quantitat }}</span>
+                    <button (click)="canviarQuantitat(plat,1)">+</button>
+                  </div>
+
+                  <button class="obs-btn" (click)="toggleObservacions(plat)" *ngIf="!esView">
+                    <mat-icon>chat_bubble_outline</mat-icon>
+                  </button>
+                </div>
+
+                <div class="fila-observacions" *ngIf="plat.mostrarObservacions">
+                  <input type="text" [(ngModel)]="plat.observacions"
+                         placeholder="Escriu observacions (poc fet, sense sal…)" />
+                </div>
+              </div>
+            </div>
+
+            <ng-template #noPrimers>
+              <div class="no-data">No hi ha primers definits per aquest menú.</div>
+            </ng-template>
+          </div>
+        </div>
+
+        <!-- BLOC SEGONS ESPECIALS -->
+        <div class="selector-block">
+          <button class="selector-header" (click)="toggleSegons()">
+            <span class="selector-title">SEGONS ESPECIALS</span>
+            <span class="chevron" [class.open]="segonsOberts">▾</span>
+          </button>
+
+          <div class="selector-col" *ngIf="segonsOberts">
+            <div *ngIf="segons.length > 0; else noSegons">
+              <div class="plat-item" *ngFor="let plat of segonsEspecial">
+                <div class="fila-superior">
+                  <span class="nom">{{ plat.nomPlat }}</span>
+
+                  <div class="quantitat-controls" *ngIf="!esView">
+                    <button (click)="canviarQuantitat(plat,-1)">-</button>
+                    <span class="quantitat">{{ plat.quantitat }}</span>
+                    <button (click)="canviarQuantitat(plat,1)">+</button>
+                  </div>
+
+                  <button class="obs-btn" (click)="toggleObservacions(plat)" *ngIf="!esView">
+                    <mat-icon>chat_bubble_outline</mat-icon>
+                  </button>
+                </div>
+
+                <div class="fila-observacions" *ngIf="plat.mostrarObservacions">
+                  <input type="text" [(ngModel)]="plat.observacions"
+                         placeholder="Escriu observacions (poc fet, sense sal…)" />
+                </div>
+              </div>
+            </div>
+
+            <ng-template #noSegons>
+              <div class="no-data">No hi ha segons definits per aquest menú.</div>
+            </ng-template>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <ng-template #estatCarrega>
+      <div class="loading-error">
+        <div *ngIf="carregant">Carregant plats del menú…</div>
+        <div *ngIf="!carregant && errorCarrega">Error carregant el menú</div>
+      </div>
+    </ng-template>
+
+    <div class="footer" *ngIf="!esView; else footerView">
+
+      <ng-container *ngIf="migMenu === 'sencer'">
+        <button class="btn-menu-especial"
+                [class.actiu]="menuEspecial"
+                (click)="menuEspecial = !menuEspecial">
+          MENÚ ESPECIAL
+        </button>
+
+        <div class="suplement-wrapper">
+          <span class="suplement-label">MENUS AMB SUPLEMENT</span>
+          <div class="suplement-controls">
+            <button (click)="canviarSuplement(-1)">-</button>
+            <input class="suplement-input" [value]="suplementCount" readonly />
+            <button (click)="canviarSuplement(1)">+</button>
+          </div>
+        </div>
+      </ng-container>
+
+      <button class="btn-acceptar" (click)="onAcceptar()">
+        ENVIAR A CUINA
+      </button>
+
+    </div>
+
+    <ng-template #footerView>
+      <div class="footer footer-view">
+        <button class="btn-acceptar" (click)="onTancar()">
+          TANCAR
+        </button>
+      </div>
+    </ng-template>
+
+  </div>
+</div>

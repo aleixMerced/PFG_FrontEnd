@@ -1,0 +1,306 @@
+<div class="historic-page">
+
+  <!-- FLETXA ENRERE + TÍTOL -->
+  <header class="page-header">
+    <button class="back-button" (click)="tornarEnrere()">
+      <mat-icon>arrow_back</mat-icon>
+    </button>
+
+    <div class="page-title">
+      <h1>Històric de comandes</h1>
+
+      <!-- Subtítol: una taula o totes -->
+      <p class="subtitle" *ngIf="idTaula != 0; else totesTaules">
+        Consultar comandes de la {{ taulaLabelHistoric }}
+      </p>
+
+      <ng-template #totesTaules>
+        <p class="subtitle">
+          Consultar comandes de totes les taules
+        </p>
+      </ng-template>
+    </div>
+  </header>
+
+  <!-- FILTRES -->
+  <section class="filters-card">
+    <div class="filters-header">
+      <h2 class="filters-title">Filtres</h2>
+
+      <button class="btn-filtres-reset" type="button" (click)="netejarFiltres()">
+        Netejar filtres
+      </button>
+    </div>
+
+    <div class="filters-grid">
+      <!-- Rang de dates -->
+      <div class="filter-group filter-dates">
+        <label class="filter-label">Rang de dates</label>
+        <div class="filter-dates-row">
+          <div class="filter-inline-field">
+            <span class="filter-inline-label">Des de</span>
+            <input
+              type="date"
+              class="filter-input"
+              [(ngModel)]="dataInici"
+              (ngModelChange)="onCanviDates()"
+            />
+          </div>
+
+          <div class="filter-inline-field">
+            <span class="filter-inline-label">Fins a</span>
+            <input
+              type="date"
+              class="filter-input"
+              [(ngModel)]="dataFinal"
+              (ngModelChange)="onCanviDates()"
+            />
+          </div>
+        </div>
+      </div>
+
+      <!-- Estat -->
+      <div class="filter-group">
+        <label class="filter-label">Estat</label>
+        <select
+          class="filter-input"
+          [(ngModel)]="estat"
+          (ngModelChange)="onCanviEstat($event)"
+        >
+          <option value="">Tots</option>
+          <option value="PENDENT">Pendent</option>
+          <option value="PAGADA">Pagada</option>
+          <option value="CONVIDAT">Convidat</option>
+        </select>
+      </div>
+
+      <!-- Forma pagament -->
+      <div class="filter-group">
+        <label class="filter-label">Forma pagament</label>
+        <select
+          class="filter-input"
+          [(ngModel)]="formaPagament"
+          (ngModelChange)="onCanviFormaPagament($event)"
+        >
+          <option value="">Totes</option>
+          <option value="EFECTIU">Efectiu</option>
+          <option value="TARGETA">Targeta</option>
+        </select>
+      </div>
+
+      <!-- Import més gran que -->
+      <div class="filter-group">
+        <label class="filter-label">Import més gran que</label>
+        <input
+          type="text"
+          class="filter-input"
+          [value]="importMinim !== null ? importMinim : ''"
+          readonly
+          (click)="obrirTeclat('importMinim')"
+          placeholder="0.00"
+        />
+      </div>
+
+      <!-- Import més petit que -->
+      <div class="filter-group">
+        <label class="filter-label">Import més petit que</label>
+        <input
+          type="text"
+          class="filter-input"
+          [value]="importMaxim !== null ? importMaxim : ''"
+          readonly
+          (click)="obrirTeclat('importMaxim')"
+          placeholder="∞"
+        />
+      </div>
+
+      <!-- Filtre de taules (només en global) -->
+      <div class="filter-group" *ngIf="idTaula === 0">
+        <label class="filter-label">Filtre de taules</label>
+        <select
+          class="filter-input"
+          [(ngModel)]="taulaSeleccionada"
+          (ngModelChange)="onCanviTaulaGlobal($event)">
+          <option [ngValue]="null">Totes</option>
+          <option *ngFor="let t of taulesDisponibles" [ngValue]="t.idTaula">
+            Taula n {{ t.numTaula }} {{ t.interiorexterior === 'I' ? 'Interior' : 'Terrassa' }}
+          </option>
+        </select>
+      </div>
+      <!-- Filtre global just al costat (mateix grid) -->
+      <div class="filter-group">
+        <label class="filter-label">Filtre global</label>
+        <input
+          type="text"
+          [(ngModel)]="textFiltrar"
+          (ngModelChange)="onCanviFiltreGlobal($event)"
+          class="filter-input"
+          placeholder="Cerca per taula, comanda, client..."
+        />
+      </div>
+    </div>
+  </section>
+
+
+  <section class="comandes-card">
+    <div class="comandes-header">
+      <h2>Llista de comandes</h2>
+      <span class="comandes-count">
+        Mostrant {{ comandesFiltrades.length }} de {{ total }} comandes
+      </span>
+    </div>
+
+    <div class="table-wrapper">
+      <table class="comandes-table">
+        <thead>
+        <tr>
+          <th>Nº Comanda</th>
+          <th>Taula</th>
+          <th>Client</th>
+          <th>Data inici</th>
+          <th>Data pagada</th>
+          <th>Forma pagament</th>
+          <th>Import</th>
+          <th>Estat</th>
+          <th>Accions</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let c of comandesFiltrades">
+          <td>#{{ c.idComanda }}</td>
+          <td>Taula {{ c.nomTaula }}</td>
+          <td>{{ c.nomClient }}</td>
+
+          <td>{{ c.dataComanda | date:'dd/MM/yyyy' }}</td>
+          <td>{{ c.dataPagament ? (c.dataPagament | date:'dd/MM/yyyy') : 'No pagada' }}</td>
+          <td>{{ c.tipusPagament ? c.tipusPagament : 'No pagada'}}</td>
+          <td>{{ c.preuComanda | number:'1.2-2' }} €</td>
+
+          <td>
+              <span
+                class="badge"
+                [ngClass]="{
+                  'badge-open':     c.estatComanda.toUpperCase() === 'PENDENT',
+                  'badge-closed':   c.estatComanda.toUpperCase() === 'PAGADA',
+                  'badge-cancelled': c.estatComanda.toUpperCase() === 'CONVIDAT'
+                }"
+              >
+                {{ c.estatComanda }}
+              </span>
+          </td>
+
+          <td>
+            <button class="btn btn-link" (click)="veureProductes(c)">
+              {{
+                c.estatComanda.toUpperCase() === 'PENDENT'
+                  ? 'Veure productes / Modificar comanda'
+                  : 'Veure productes'
+              }}
+            </button>
+          </td>
+        </tr>
+
+        <!-- Per si no hi ha resultats -->
+        <tr *ngIf="comandesFiltrades.length === 0">
+          <td colspan="9">No s'ha trobat cap comanda.</td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- PAGINACIÓ -->
+    <div class="pagination-bar">
+      <div class="page-size">
+        <span>Files per pàgina:</span>
+        <select
+          class="page-size-select"
+          [ngModel]="pageSize"
+          (ngModelChange)="canviarFilesPerPagina($event)"
+        >
+          <option [ngValue]="10">10</option>
+          <option [ngValue]="25">25</option>
+          <option [ngValue]="50">50</option>
+        </select>
+      </div>
+
+      <div class="page-info">
+        <span>
+          Pàgina {{ page }} de {{ totalPages }}&nbsp;
+          ({{ total }} comandes)
+        </span>
+      </div>
+
+      <div class="page-controls">
+        <button
+          class="btn-page"
+          (click)="canviarPagina(page - 1)"
+          [disabled]="page === 1"
+        >
+          &laquo;
+        </button>
+
+        <button
+          class="btn-page"
+          *ngIf="pagesToShow.length && pagesToShow[0] > 1"
+          (click)="canviarPagina(1)"
+        >
+          1
+        </button>
+        <span
+          class="page-ellipsis"
+          *ngIf="pagesToShow.length && pagesToShow[0] > 2"
+        >
+          ...
+        </span>
+
+        <button
+          class="btn-page"
+          *ngFor="let p of pagesToShow"
+          [class.active]="p === page"
+          (click)="canviarPagina(p)"
+        >
+          {{ p }}
+        </button>
+
+        <span
+          class="page-ellipsis"
+          *ngIf="pagesToShow.length && pagesToShow[pagesToShow.length - 1] < totalPages - 1"
+        >
+          ...
+        </span>
+        <button
+          class="btn-page"
+          *ngIf="pagesToShow.length && pagesToShow[pagesToShow.length - 1] < totalPages"
+          (click)="canviarPagina(totalPages)"
+        >
+          {{ totalPages }}
+        </button>
+
+        <button
+          class="btn-page"
+          (click)="canviarPagina(page + 1)"
+          [disabled]="page === totalPages"
+        >
+          &raquo;
+        </button>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- TECLAT NUMÈRIC -->
+  <div class="overlay" *ngIf="mostraTeclat">
+    <div class="overlay-backdrop" (click)="tancarTeclat()"></div>
+
+    <div class="overlay-panel">
+      <app-teclat-numeric
+        [title]="teclatTitle"
+        [initialValue]="valorTeclatInicial"
+        (ok)="onTeclatOk($event)"
+        (close)="tancarTeclat()">
+      </app-teclat-numeric>
+    </div>
+  </div>
+
+</div>

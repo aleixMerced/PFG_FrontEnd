@@ -1,1 +1,203 @@
-<router-outlet></router-outlet>
+<mat-sidenav-container class="viewport">
+  <!-- SIDEBAR DRET -->
+  <mat-sidenav
+    #drawer
+    class="sidebar"
+    mode="side"
+    position="end"
+    opened>
+
+    <!-- MENÚ PRINCIPAL -->
+    <mat-nav-list class="sidebar-menu">
+
+      <a mat-list-item routerLink="/barra" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>restaurant</mat-icon>
+        <span matListItemTitle class="label">Restaurant</span>
+      </a>
+
+      <a mat-list-item routerLink="/terrassa" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>table_bar</mat-icon>
+        <span matListItemTitle class="label">Terrassa</span>
+      </a>
+
+      <a mat-list-item routerLink="/comandaFinal" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>point_of_sale</mat-icon>
+        <span matListItemTitle class="label">Comanda</span>
+      </a>
+
+      <a mat-list-item routerLink="/menu-configuracio" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>settings</mat-icon>
+        <span matListItemTitle class="label">Configuració</span>
+      </a>
+
+      <a mat-list-item routerLink="/estadistiques" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>bar_chart</mat-icon>
+        <span matListItemTitle class="label">Estadistiques</span>
+      </a>
+
+      <a mat-list-item routerLink="/historic-comandes" routerLinkActive="active-link">
+        <mat-icon matListItemIcon>list_alt</mat-icon>
+        <span matListItemTitle class="label">Històric</span>
+      </a>
+
+    </mat-nav-list>
+
+    <!-- FOOTER LATERAL -->
+    <div class="sidebar-footer">
+
+      <!-- FER CAIXA MATÍ -->
+      <a
+        mat-list-item
+        *ngIf="!haFetCaixaMati && !haTancatDia"
+        (click)="onObrirPopupFerCaixaMati()"
+        [class.perill]="mostrarFerCaixaObligatori"
+        [class.disabled-item]="!online">
+
+        <mat-icon matListItemIcon>paid</mat-icon>
+        <span matListItemTitle class="label">Fer caixa matí</span>
+      </a>
+
+      <!-- TANCAR DIA -->
+      <a
+        mat-list-item
+        *ngIf="haFetCaixaMati && !haTancatDia"
+        (click)="onObrirPopupTancarDia()"
+        [class.disabled-item]="!online">
+
+        <mat-icon matListItemIcon>lock_clock</mat-icon>
+        <span matListItemTitle class="label">Tancar dia</span>
+      </a>
+
+      <!-- DIA TANCAT (només info) -->
+      <a
+        mat-list-item
+        *ngIf="haTancatDia"
+        class="dia-tancat-item">
+
+        <mat-icon matListItemIcon>done_all</mat-icon>
+        <span matListItemTitle class="label">Dia tancat</span>
+      </a>
+
+    </div>
+
+  </mat-sidenav>
+
+  <!-- CONTINGUT PRINCIPAL + BARRA INFERIOR -->
+  <mat-sidenav-content class="content-wrap">
+
+    <!-- BANNER AVÍS FER CAIXA (NO ES POT TANCAR) -->
+    <div
+      class="banner-fer-caixa"
+      *ngIf="mostrarBannerFerCaixa">
+
+      <div class="bf-icon">
+        <mat-icon>warning_amber</mat-icon>
+      </div>
+
+      <div class="bf-main">
+        <div class="bf-title">
+          Cal fer la caixa del matí
+        </div>
+        <div class="bf-text">
+          Abans de seguir treballant, tanca la caixa del matí per tenir els comptes al dia.
+        </div>
+
+        <button class="bf-btn" (click)="onObrirPopupFerCaixaMati()">
+          Fer la caixa ara
+        </button>
+      </div>
+    </div>
+
+    <router-outlet></router-outlet>
+
+    <div class="barra-inferior">
+      <div class="bi-left">
+        <span class="bi-section" *ngIf="seccioActual">
+          {{ seccioActual }}
+        </span>
+      </div>
+
+      <div class="bi-center">
+        <!-- Espai per info futura (taula, comanda, etc.) -->
+      </div>
+
+      <div class="bi-right">
+        <span class="bi-datetime">
+          {{ ara | date:'dd/MM/yyyy HH:mm' }}
+        </span>
+
+        <span class="bi-shift">
+          {{ tornActual }}
+        </span>
+
+        <span
+          class="bi-status"
+          [class.online]="online"
+          [class.offline]="!online">
+          {{ online ? 'ONLINE' : 'OFFLINE' }}
+        </span>
+      </div>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>
+
+<!-- POPUP RESUM (MATÍ / DIA) -->
+<div class="popup-backdrop" *ngIf="showPopup">
+  <div class="popup-caixa">
+
+    <div class="popup-header">
+      <div class="popup-title">
+        <span>{{ popupTitle }}</span>
+      </div>
+      <div class="popup-subtitle">
+        Revisa els imports abans de confirmar.
+      </div>
+    </div>
+
+    <div class="popup-body">
+
+      <div class="popup-row">
+        <div class="popup-label-text">
+          Total efectiu
+        </div>
+        <div class="popup-amount">
+          {{ resumCaixa?.totalEfectiu | number:'1.2-2' }} €
+        </div>
+      </div>
+
+      <div class="popup-row">
+        <div class="popup-label-text">
+          Total targeta
+        </div>
+        <div class="popup-amount">
+          {{ resumCaixa?.totalTargeta | number:'1.2-2' }} €
+        </div>
+      </div>
+
+      <div class="popup-row total">
+        <div class="popup-label-text">
+          Total dia
+        </div>
+        <div class="popup-amount highlight">
+          {{ resumCaixa?.totalDia | number:'1.2-2' }} €
+        </div>
+      </div>
+
+      <label class="popup-label">
+        <span class="popup-label-title">Observacions</span>
+        <textarea [(ngModel)]="observacions" rows="3" placeholder="Anota incidències, diferències, etc."></textarea>
+      </label>
+
+    </div>
+
+    <div class="popup-actions">
+      <button class="btn-caixa secundari" (click)="cancelarPopup()">
+        Cancel·lar
+      </button>
+      <button class="btn-caixa principal" (click)="confirmarPopup()">
+        {{ popupConfirmText }}
+      </button>
+    </div>
+
+  </div>
+</div>

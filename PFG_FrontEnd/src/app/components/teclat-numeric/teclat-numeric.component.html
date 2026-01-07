@@ -1,0 +1,22 @@
+<div class="teclat-wrap"
+    cdkDrag
+    cdkDragBoundary=".pay-overlay">
+  <div class="header">
+    <h3 class="title">{{ title }}</h3>
+    <button class="close-btn" (click)="close.emit()" aria-label="Tancar">×</button>
+  </div>
+
+  <div class="display">{{ value || '0' }}</div>
+
+  <div class="grid">
+    <button
+      *ngFor="let b of digits"
+      class="key"
+      [class.key-action]="b==='C' || b==='OK'"
+      [class.key-ok]="b==='OK'"
+      [disabled]="b==='OK' && value.trim()===''"
+      (click)="onBtn(b)">
+      {{ b }}
+    </button>
+  </div>
+</div>

@@ -1,0 +1,63 @@
+<div class="config-wrapper">
+
+  <button class="back-btn" (click)="tornarEnrere()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <div class="config-panel">
+    <h1 class="titol">Crear tipus</h1>
+
+    <form class="tipus-form">
+
+      <div class="form-grid">
+        <div class="form-field form-field-full">
+          <label for="nomTipus">Nom del tipus</label>
+          <input
+            id="nomTipus"
+            name="nomTipus"
+            [(ngModel)]="nomTipus"
+            type="text"
+            maxlength="50"
+            required />
+        </div>
+
+        <div class="form-field form-field-full">
+          <label for="imatgeTipus">Imatge del tipus</label>
+
+          <div class="imatge-grid">
+            <div class="file-input-wrapper" [class.with-image]="imatgeUrl">
+              <input
+                id="imatgeTipus"
+                name="imatgeTipus"
+                type="file"
+                accept="image/*"
+                (change)="onImatgeSeleccionada($event)" />
+
+              <span class="file-input-label">
+                {{ nomImatge || 'Tria una imatge pel tipus (opcional)' }}
+              </span>
+            </div>
+
+            <div class="imatge-preview" *ngIf="imatgeUrl">
+              <img [src]="imatgeUrl" alt="Imatge tipus" />
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- botons al mateix lloc que crear-producte -->
+      <div class="form-actions">
+        <button class="primary-btn" type="button" (click)="guardarTipus()">
+          Desar tipus
+        </button>
+
+        <button class="secondary-btn" type="button" (click)="netejarTipus()">
+          Netejar
+        </button>
+      </div>
+
+    </form>
+  </div>
+
+</div>

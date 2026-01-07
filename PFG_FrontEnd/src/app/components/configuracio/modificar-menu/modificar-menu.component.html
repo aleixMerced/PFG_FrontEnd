@@ -1,0 +1,156 @@
+<div class="config-wrapper">
+  <button class="back-btn" (click)="tornarEnrere()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <div class="config-panel">
+    <h1 class="titol">Modificar menú</h1>
+
+    <!-- Selector dia INLINE -->
+    <div class="pick-day">
+      <div class="pick-day-label">Selecciona el dia:</div>
+
+      <button class="import-btn" type="button" (click)="obrirSelectorDia(dayPicker)">
+        {{ DiaMenuNormal ? DiaMenuNormal : 'Escollir dia' }}
+      </button>
+
+      <div class="pick-day-hint" *ngIf="carregant">Carregant...</div>
+    </div>
+
+    <!-- Grids -->
+    <div class="config-grid" *ngIf="menuCarregat">
+      <!-- PRIMERS -->
+      <div class="grid-card">
+        <div class="grid-title">Escull primers plats</div>
+
+        <div class="table">
+          <input
+            class="filter-input"
+            type="text"
+            placeholder="Cerca per nom..."
+            [(ngModel)]="filterPrimers"
+          />
+
+          <div class="row" *ngFor="let x of primersFiltrats">
+            <div class="check">
+              <input type="checkbox" [(ngModel)]="x.checked" />
+            </div>
+            <div class="grid c-name">{{ x.producte.nomProducte }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SEGONS -->
+      <div class="grid-card">
+        <div class="grid-title">Escull segons plats</div>
+
+        <div class="table">
+          <input
+            class="filter-input"
+            type="text"
+            placeholder="Cerca per nom..."
+            [(ngModel)]="filterSegons"
+          />
+
+          <div class="row" *ngFor="let x of segonsFiltrats">
+            <div class="check">
+              <input type="checkbox" [(ngModel)]="x.checked" />
+            </div>
+            <div class="grid c-name">{{ x.producte.nomProducte }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER: Tipus + botons alineats a la mateixa altura -->
+    <div class="panel-footer" *ngIf="menuCarregat">
+      <div class="footer-left">
+        <div class="menu-type-inline">
+          <div class="menu-type-label">Tipus de menú</div>
+
+          <div class="segmented" role="group" aria-label="Tipus de menú">
+            <button
+              type="button"
+              class="seg-btn"
+              [class.active]="IdMenu === 11"
+              (click)="setTipusMenu(11)">
+              Diari
+            </button>
+
+            <button
+              type="button"
+              class="seg-btn"
+              [class.active]="IdMenu === 10"
+              (click)="setTipusMenu(10)">
+              Festiu
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-right">
+        <button class="import-btn import-btn--danger" type="button" (click)="eliminarMenu()">
+          Eliminar
+        </button>
+
+        <button class="import-btn import-btn--green" type="button" (click)="actualitzarMenu()">
+          Actualitzar menú
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- DATEPICKER DIA (amagat) -->
+  <mat-form-field class="hidden-date-field" appearance="fill">
+    <input matInput [matDatepicker]="dayPicker" (dateChange)="onDiaChange($event.value)" />
+    <mat-datepicker #dayPicker [touchUi]="true"></mat-datepicker>
+  </mat-form-field>
+
+  <!-- CONFIRMACIÓ ACTUALITZAR -->
+  <ng-template #confirmUpdateDialog let-dialogRef="dialogRef">
+    <div class="confirm-modal">
+      <h2 class="confirm-title">Confirmació</h2>
+
+      <p class="confirm-text">
+        Actualitzar menú dia <b>{{ DiaMenuNormal }}</b>?
+      </p>
+
+      <p class="confirm-sub">
+        Tipus: <b>{{ IdMenu === 10 ? 'Festiu' : 'Diari' }}</b>
+      </p>
+
+      <div class="confirm-actions">
+        <button class="import-btn" type="button" (click)="cancelarActualitzar(dialogRef)">
+          Cancel·lar
+        </button>
+        <button class="import-btn import-btn--green" type="button" (click)="confirmarActualitzar(dialogRef)">
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- CONFIRMACIÓ ELIMINAR -->
+  <ng-template #confirmDeleteDialog let-dialogRef="dialogRef">
+    <div class="confirm-modal">
+      <h2 class="confirm-title">Confirmació</h2>
+
+      <p class="confirm-text">
+        Eliminar el menú del dia <b>{{ DiaMenuNormal }}</b>?
+      </p>
+
+      <p class="confirm-sub danger">
+        Aquesta acció no es pot desfer.
+      </p>
+
+      <div class="confirm-actions">
+        <button class="import-btn" type="button" (click)="cancelarEliminar(dialogRef)">
+          Cancel·lar
+        </button>
+        <button class="import-btn import-btn--danger" type="button" (click)="confirmarEliminar(dialogRef)">
+          Eliminar
+        </button>
+      </div>
+    </div>
+  </ng-template>
+</div>

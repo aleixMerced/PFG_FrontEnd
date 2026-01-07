@@ -1,0 +1,38 @@
+<div class="number-pad-container">
+  <div class="number-pad">
+    <div class="pad-header">
+      <h3 class="title">Selector Numéric</h3>
+      <button class="close-btn" (click)="closePad()" aria-label="Tancar">&times;</button>
+    </div>
+
+    <p class="pad-subtitle" *ngIf="allowFractions">Quantes unitats vols pagar, queden per pagar {{producte?.unitats}}?</p>
+
+    <div class="buttons-grid">
+      <!-- 1..9 (multi-dígit) -->
+      <button
+        *ngFor="let number of numbers"
+        class="number-btn"
+        (click)="onNumberClick(number)">
+        {{ number }}
+      </button>
+
+      <button class="tool-btn backspace" (click)="backspace()" [disabled]="!hasSelection()">←</button>
+      <ng-container *ngIf="allowFractions">
+
+            <button class="fraction-btn" (click)="onFractionClick('1/2')">1/2</button>
+            <button class="fraction-btn" (click)="onFractionClick('1/4')">1/4</button>
+      </ng-container>
+      <!-- fraccions -->
+
+    </div>
+
+    <div class="selected-value" *ngIf="selectedValue">
+      Valor seleccionado: <span class="value">{{ selectedValue }}</span>
+    </div>
+
+    <div class="pad-footer">
+      <button class="clear-btn" (click)="clearSelection()">Netejar</button>
+      <button class="confirm-btn" (click)="confirmSelection()" [disabled]="!hasSelection()">✅ Acceptar</button>
+    </div>
+  </div>
+</div>

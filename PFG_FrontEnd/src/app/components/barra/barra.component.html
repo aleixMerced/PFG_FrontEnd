@@ -1,103 +1,56 @@
-<div class="pla-general"> <!-- PLA DE LES TAULES -->
+<div class="pla-general">
+  <div
+    class="taules"
+    *ngFor="let taula of taules"
+    (click)="onClickTaula(taula)"
+    [class.taula-simple]="!taula.subTaules?.length"
+    [class.taula-separada]="taula.subTaules?.length"
+    [class.taula-selected]="isTaulaSelected(taula)"
+    [class.ocupada]="taula.ocupat">
 
+    <div class="taula-wrapper">
 
-    <div class="part-superior">
+      <!-- MODE NORMAL si NO té subtaules -->
+      <ng-container *ngIf="!taula.subTaules?.length; else taulaSeparada">
+        <img class="taula-img" [src]="getTaulaImg(taula)" />
+        <span class="taula-id">{{ taula.numTaula }}</span>
+      </ng-container>
 
-        <div  class="part-superior-esquerra">
+      <!-- MODE SEPARADA si té subtaules -->
+      <ng-template #taulaSeparada>
+        <div class="subtaules">
+          <div
+            class="subtaula"
+            *ngFor="let st of taula.subTaules; let i = index"
+            (click)="onClickSubTaula(taula, st, i); $event.stopPropagation()"
+            [class.subtaula-selected]="isSubTaulaSelected(st)">
 
-
-          <div class="taula" >
-            <img  [src]="taules[5].src" alt="taula6">
-          </div>
-          <div class="taula">
-            <img  [src]="taules[6].src" alt="taula7">
+            <img class="subtaula-img" [src]="getTaulaImg(st)" />
+            <span class="subtaula-id">{{ taula.numTaula }}.{{ i + 1 }}</span>
           </div>
         </div>
+      </ng-template>
 
-        <div class="part-superior-dreta">
-          <div  class="taula">
-            <img [src]="taules[4].src" alt="taula5">
-          </div>
-          <div  class="taula">
-            <img [src]="taules[3].src" alt="taula4">
-          </div>
-          <div  class="taula">
-            <img [src]="taules[2].src" alt="taula3">
-          </div>
-
-        </div>
-    </div> <!-- tancament div part superior -->
-
-    <hr class="linia-negra">
-
-    <div class="part-inferior">
-        <div  class="part-inferior-dreta">
-
-          <div  class="taula">
-            <img [src]="taules[1].src" alt="taula2">
-          </div>
-          <div  class="taula">
-            <img [src]="taules[0].src" alt="taula1">
-          </div>
-
-        </div>
-
-        <button class="obrir-barra" (click)="crearComanda = true" >
-          CREAR
-          <br>
-          COMANDA
-        </button>
-
-
-    </div> <!-- tancament div part inferior -->
-
-  <app-comanda
-    *ngIf="crearComanda"
-    class="modal-productes"
-    [titol]="'Crear Comanda per la barra'"
-    [idTaula]="99"
-    [idComanda]="0"
-    [modificarComanda]= false
-    (tancar)="crearComanda = false"
-    (actualitzar)="actualitzarComanda()">
-  </app-comanda>
-
-  <app-barra-comandes
-    [refreshTrigger]="comandesCargades"
-    class="modal-barra-comandes">
-  </app-barra-comandes>
-
-  <app-comanda-express
-    class="comanda-express"
-    (mostrarConfirmacio)="mostrarPantalla = true"
-    (quantitatTotalOutput)="rebreQuantitatTotal($event)"></app-comanda-express>
-
-
-  <div *ngIf="mostrarPantalla">
-    <div class="backdrop" (click)="mostrarPantalla = false"></div>
-
-    <div
-      #modalWrapper
-      class="confirmacio-cobrar"
-      cdkTrapFocus
-      tabindex="-1"
-    >
-      <span>Cobrar comanda de {{ quantitatTotal }}</span>
-      <div class="boto-container">
-        <button class="botoEfectiu" (click)="mostrarPantalla = false" autofocus>
-          Efectiu
-        </button>
-        <button class="botoTargeta" (click)="mostrarPantalla = false">
-          Targeta
-        </button>
-        <button class="botoCancelar" (click)="mostrarPantalla = false">
-          Cancel·lar
-        </button>
-      </div>
     </div>
   </div>
+</div>
 
+<div class="accions-taula">
+  <h3 *ngIf="selectedTaula" class="titol">
+    Taula: {{ selectedTaulaLabel }}
+  </h3>
 
+  <div class="botons" *ngIf="mostrarbotons">
+    <button class="botoOpcio" (click)="separaTaules()" [disabled]="!selectedTaula">
+      <span>{{ selectedTaula?.taulaPare != null ? 'Juntar taules' : 'Separa taules' }}</span>
+    </button>
 
+    <button class="botoOpcio" (click)="buscarHistoric()" [disabled]="!selectedTaula">
+      <span>Històric comandes</span>
+    </button>
 
+    <button class="botoOpcio" (click)="afegirDesocuparTaula()" [disabled]="!selectedTaula">
+      <span>{{ selectedTaula?.ocupat ? 'Desocupar taula' : 'Afegir comanda taula' }}</span>
+    </button>
+  </div>
 </div>

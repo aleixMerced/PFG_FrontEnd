@@ -1,0 +1,242 @@
+<div class="split-screen">
+  <div class="left-pane">
+    <div class="comanda-botons">
+      <div class="part-cobrar">
+        <div class="barra-dades-min">
+
+          <div class="dada">
+            ID Comanda
+            <span class="valor">{{ idComanda }}</span>
+          </div>
+
+          <div class="dada">
+            # Comensals
+            <input  class="valor camp-num" [readonly]="readOnly"
+                    type="number" min="1" placeholder="0"
+                    [(ngModel)]="numComensals">
+          </div>
+
+
+          <div class="dada">
+            Núm.Taula
+            <input  class="valor camp-num"
+                    placeholder="—"
+                    [(ngModel)]="numTaula" [readonly]="readOnly"
+                    (click)="ficarNumTaula()">
+          </div>
+        </div>
+
+        <div class="nom-client-display" *ngIf="nomClient">
+          NOM CLIENT: {{ nomClient }}
+        </div>
+
+        <div class="part-articles">
+
+          <div class="tituls-articles fila">
+            <div class="col article">Article</div>
+            <div class="col uds">Uds</div>
+            <div class="col import">Import</div>
+            <div class="col total">Total</div>
+            <div class="col accio"></div>
+          </div>
+
+          <div *ngFor="let producte of producteComanda"
+               class="comanda-article fila"
+               [class.pagada]="producte.pagat">
+            <div class="col article">
+              {{ producte.nomProducte }}
+              <span *ngIf="producte.pagat" class="badge-pagat">PAGAT</span>
+            </div>
+            <div class="col uds">{{ producte.unitats }}</div>
+            <div class="col import">{{ producte.preuUnitari | number:'1.2-2' }} €</div>
+            <div class="col total">{{ producte.total | number:'1.2-2' }} €</div>
+
+            <!-- només permet editar si NO està pagat -->
+            <button class="col accio mat-icon-button"
+                    *ngIf="!readOnly && !producte.pagat"
+                    (click)="editar(producte)">
+              <mat-icon class="edit-icon">edit</mat-icon>
+            </button>
+          </div>
+
+
+        </div>
+
+        <div class="part-preu">
+          <span class="valor-total">{{ preuFinal | number:'1.2-2' }}</span>
+        </div>
+      </div>
+      <div class="part-bottons">
+        <div class="botoOpcio" (click)="!readOnly && (afegirNomComandaMSG = true)" [class.disabled]="readOnly">
+          <span>AFEGIR NOM</span>
+        </div>
+        <div class="botoOpcio" (click)=afegirComanda() >
+          <span>GUARDAR I SORTIR</span>
+        </div>
+        <div class="botoOpcio" (click)="!readOnly && (novaComandaMSG = true) " [class.disabled]="readOnly">
+          <span>NOVA COMANDA</span>
+        </div>
+        <div class="botoOpcio" (click)="!readOnly && convidarComanda()" [class.disabled]="readOnly">
+          <span>CONVIDAR</span>
+        </div>
+        <div class="botoOpcio" (click)="imprimirTicketFinal()">
+          <span>IMPRIMIR TICKET</span>
+        </div>
+        <div class="botoOpcio" (click)="menuDiariObert = true">
+          <span>MENU DIARI</span>
+        </div>
+        <div class="botoOpcio" (click)="obrirEliminarComanda()" [class.disabled]="readOnly">
+          <span>ELIMINAR COMANDA</span>
+        </div>
+
+
+      </div>
+    </div>
+
+    <div  class="part-calculadora" >
+      <div class="number-pad">
+        <button (click)="onNumberClick('1')" [disabled]="!calculadoraEnable">1</button>
+        <button (click)="onNumberClick('2')" [disabled]="!calculadoraEnable">2</button>
+        <button (click)="onNumberClick('3')" [disabled]="!calculadoraEnable"> 3</button>
+        <button  [ngClass]="{'pressed' : isPressedUd}" (mousedown)="isPressed1('UD')" [disabled]="!calculadoraEnable">Unitats</button>
+
+        <div class="action-col">
+          <!-- Mode normal: un sol botó gran -->
+          <button *ngIf="!calculadoraEnable"
+                  class="boto-cobrar"
+                  (click)="cobrarComanda()"
+                  [disabled]="readOnly || producteComanda.length <= 0">
+            {{ guardar_cobrar }}
+          </button>
+
+
+          <!-- Mode edició: dos botons que es reparteixen el mateix espai -->
+          <div *ngIf="calculadoraEnable" class="btn-split">
+            <button class="boto-cobrar" (click)="GuardarCobrar()" [disabled]="readOnly">Guardar</button>
+            <button class="boto-cobrar boto-cancel" (click)="CancelarProducte()" [disabled]="readOnly">Cancel·lar</button>
+          </div>
+        </div>
+
+        <button (click)="onNumberClick('4')" [disabled]="!calculadoraEnable">4</button>
+        <button (click)="onNumberClick('5')" [disabled]="!calculadoraEnable">5</button>
+        <button (click)="onNumberClick('6')"[disabled]="!calculadoraEnable">6</button>
+        <button  [ngClass]="{'pressed' : isPressedPr}" (mousedown)="isPressed1('PR')" [disabled]="!calculadoraEnable">Preu</button>
+
+        <button (click)="onNumberClick('7')" [disabled]="!calculadoraEnable">7</button>
+        <button (click)="onNumberClick('8')" [disabled]="!calculadoraEnable">8</button>
+        <button (click)="onNumberClick('9')" [disabled]="!calculadoraEnable">9</button>
+        <button (click)="restarUds()" [disabled]="!calculadoraEnable">Restar Uds.</button>
+
+        <button (click)="onNumberClick(',')" [disabled]="!calculadoraEnable">,</button>
+        <button (click)="onNumberClick('0')" [disabled]="!calculadoraEnable">0</button>
+        <button (click)="borrar()" [disabled]="!calculadoraEnable">C</button>
+        <button (click)="obrirCalaix()" >Obrir Calaix</button>
+
+      </div>
+    </div >
+
+  </div>
+
+  <div class="right-pane">
+    <div class="top-right-panel">
+      <ng-scrollbar style="width: 100%; height: 100%;" orientation="vertical" thumbClass="custom-scrollbars">
+        <div class="tipusProducte" *ngFor="let tipus of tipusProducte">
+          <img class="imatge-tipus" [src]="getTipusImg(tipus)"[alt]="tipus.nomTipus" (click)="mostrarProductesTipus(tipus.nomTipus)">
+        </div>
+      </ng-scrollbar>
+    </div>
+
+    <div class="bot-right-panel">
+      <ng-scrollbar style="width: 100%; height: 100%;" orientation="vertical" thumbClass="custom-scrollbars">
+        <div class="producte" *ngFor="let producte of productePerTipusEspecific">
+          <img class="imatge-producte" [src]="getProducteImg(producte)" [alt]="producte.nomProducte" (click)="onClickProducte(producte)">
+        </div>
+      </ng-scrollbar>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="mostrarTaules" class="popup-overlay">
+  <div class="popup-box">
+    <button class="popup-close" (click)="mostrarTaules = false">&times;</button>
+    <span>ESCULL TAULA</span>
+
+    <select
+      class="popup-select"
+      [(ngModel)]="taulaSeleccionada"
+      (ngModelChange)="onTaulaSeleccionadaChange($event)"
+    >
+      <option [ngValue]="null" disabled>— Selecciona —</option>
+
+      <option
+        *ngFor="let t of taules"
+        [ngValue]="t"
+        [disabled]="t.ocupat">
+      Taula {{ t.nomMostrat }}-{{t.interiorexterior}} {{ t.ocupat ? '(ocupada)' : '' }}
+      </option>
+    </select>
+  </div>
+</div>
+
+<div *ngIf="afegirNomComandaMSG" class="popup-overlay">
+  <div class="popup-box">
+    <button class="popup-close"  (click)="afegirNomComandaMSG = false"></button>
+    <span class="popup-titular">AFEGIR NOM COMANDA</span>
+    <label class="popup-field">
+      <input  type="text"
+              placeholder="Escriu aquí…"
+              [(ngModel)]="nomClientAux" />
+    </label>
+    <button class="popup-btn si" (click)="afegirNom()">CONFIRMAR</button>
+  </div>
+</div>
+
+<div *ngIf="novaComandaMSG" class="popup-overlay">
+  <div class="popup-box">
+    <button class="popup-close" (click)="novaComandaMSG = false">&times;</button>
+    <span class="popup-titular">CREARAS UNA NOVA COMANDA, VOLS GUARDAR O ESBORRAR L'ACTUAL?</span>
+
+    <div class="popup-actions">
+      <button class="popup-btn esborrar" (click)="afegirComanda()">GUARDAR</button>
+      <button class="popup-btn cancelar"  (click)="novaComanda()">ESBORRAR</button>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="eliminarComandaMSG" class="popup-overlay">
+  <div class="popup-box">
+    <button class="popup-close" (click)="eliminarComandaMSG = false">&times;</button>
+
+    <span class="popup-titular">ELIMINAR COMANDA</span>
+    <p class="popup-text">
+      Estàs segur que vols eliminar la comanda <b>#{{ idComanda }}</b>?
+      <br />
+      Aquesta acció no es pot desfer.
+    </p>
+
+    <div class="popup-actions">
+      <button class="popup-btn esborrar" (click)="confirmarEliminarComanda()">SÍ, ELIMINAR</button>
+      <button class="popup-btn cancelar" (click)="eliminarComandaMSG = false">CANCEL·LAR</button>
+    </div>
+  </div>
+</div>
+
+
+<div *ngIf="calculadoraEnable" class="ui-overlay"></div>
+
+<app-menu-selector
+  *ngIf="menuSelectorObert && menuProducteSeleccionat"
+  [menuProducte]="menuProducteSeleccionat"
+  [mode]="'select'"
+  [migMenu]="esMigMenu ? 'mig' : 'sencer'"
+  (tancar)="tancarMenuSelector()"
+  [idTaula]="numTaula ?? 'Barra'"
+  (llest)="onMenuLlest($event)">
+</app-menu-selector>
+
+<app-menu-selector
+  *ngIf="menuDiariObert"
+  [mode]="'view'"
+  (tancar)="tancarMenuDiari()">
+</app-menu-selector>
+
