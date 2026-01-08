@@ -160,7 +160,6 @@
         <div class="cash-box" *ngIf="metodePagament === 'efectiu'">
           <label class="cash-label">Quantitat pagada</label>
 
-          <!-- ✅ Input tipus text (no number), i obre teclat al click -->
           <div class="cash-input">
             <input
               type="text"
@@ -172,7 +171,6 @@
             />
           </div>
 
-          <!-- ✅ Quick buttons en 2 línies -->
           <div class="quick-grid">
             <button type="button" (click)="setQuick(0.05)">0.05</button>
             <button type="button" (click)="setQuick(0.10)">0.10</button>

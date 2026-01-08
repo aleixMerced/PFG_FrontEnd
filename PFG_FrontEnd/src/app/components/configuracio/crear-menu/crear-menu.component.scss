@@ -191,12 +191,11 @@ $shadow-sm: 0 3px 8px rgba(0, 0, 0, 0.12);
   }
 }
 
-/* ===== FOOTER (tipus + botons a la mateixa altura) ===== */
 .panel-footer {
   margin-top: auto;
   display: flex;
-  align-items: center;            // clau
-  justify-content: space-between; // esquerra / dreta
+  align-items: center;
+  justify-content: space-between;
   gap: 1rem;
   padding-top: 1.2rem;
   flex-wrap: wrap;
@@ -209,7 +208,6 @@ $shadow-sm: 0 3px 8px rgba(0, 0, 0, 0.12);
   gap: 0.8rem;
 }
 
-/* ===== BOTONS ===== */
 .import-btn {
   height: 44px;
   padding: 0 1.4rem;
@@ -247,7 +245,6 @@ $shadow-sm: 0 3px 8px rgba(0, 0, 0, 0.12);
   pointer-events: none;
 }
 
-/* ===== MODAL ===== */
 .confirm-modal {
   padding: 0.9rem 1rem;
 }

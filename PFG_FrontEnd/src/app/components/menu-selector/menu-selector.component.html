@@ -11,7 +11,7 @@
 
     <div class="body" *ngIf="!carregant && !errorCarrega; else estatCarrega">
 
-      <!-- ✅ MIG MENÚ: llista única + quantitat per plat -->
+      <!-- MIG MENÚ: llista única + quantitat per plat -->
       <div class="selectors" *ngIf="migMenu === 'mig' && !esView">
 
         <div class="selector-block">
@@ -29,7 +29,6 @@
                 <div class="fila-superior">
                   <span class="nom">{{ plat.nomPlat }}</span>
 
-                  <!-- ✅ Controls quantitat per plat -->
                   <div class="quantitat-controls">
                     <button type="button" (click)="canviarQuantitatMig(plat,-1)">-</button>
                     <span class="quantitat">{{ plat.quantitat || 0 }}</span>
@@ -59,7 +58,7 @@
 
       </div>
 
-      <!-- ✅ MENÚ SENCER -->
+      <!-- MENÚ SENCER -->
       <div class="selectors" *ngIf="migMenu === 'sencer' && !menuEspecial">
 
         <!-- BLOC PRIMERS -->
@@ -138,7 +137,7 @@
 
       </div>
 
-      <!-- ✅ MENÚ ESPECIAL (només sencer) -->
+      <!-- MENÚ ESPECIAL  -->
       <div class="selectors" *ngIf="migMenu === 'sencer' && menuEspecial">
 
         <!-- BLOC PRIMERS ESPECIALS -->
@@ -178,7 +177,6 @@
           </div>
         </div>
 
-        <!-- BLOC SEGONS ESPECIALS -->
         <div class="selector-block">
           <button class="selector-header" (click)="toggleSegons()">
             <span class="selector-title">SEGONS ESPECIALS</span>

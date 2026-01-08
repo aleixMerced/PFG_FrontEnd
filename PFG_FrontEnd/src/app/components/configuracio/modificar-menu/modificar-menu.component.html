@@ -6,7 +6,6 @@
   <div class="config-panel">
     <h1 class="titol">Modificar menú</h1>
 
-    <!-- Selector dia INLINE -->
     <div class="pick-day">
       <div class="pick-day-label">Selecciona el dia:</div>
 
@@ -17,9 +16,7 @@
       <div class="pick-day-hint" *ngIf="carregant">Carregant...</div>
     </div>
 
-    <!-- Grids -->
     <div class="config-grid" *ngIf="menuCarregat">
-      <!-- PRIMERS -->
       <div class="grid-card">
         <div class="grid-title">Escull primers plats</div>
 
@@ -40,7 +37,6 @@
         </div>
       </div>
 
-      <!-- SEGONS -->
       <div class="grid-card">
         <div class="grid-title">Escull segons plats</div>
 
@@ -62,7 +58,6 @@
       </div>
     </div>
 
-    <!-- FOOTER: Tipus + botons alineats a la mateixa altura -->
     <div class="panel-footer" *ngIf="menuCarregat">
       <div class="footer-left">
         <div class="menu-type-inline">
@@ -106,7 +101,6 @@
     <mat-datepicker #dayPicker [touchUi]="true"></mat-datepicker>
   </mat-form-field>
 
-  <!-- CONFIRMACIÓ ACTUALITZAR -->
   <ng-template #confirmUpdateDialog let-dialogRef="dialogRef">
     <div class="confirm-modal">
       <h2 class="confirm-title">Confirmació</h2>
@@ -130,7 +124,6 @@
     </div>
   </ng-template>
 
-  <!-- CONFIRMACIÓ ELIMINAR -->
   <ng-template #confirmDeleteDialog let-dialogRef="dialogRef">
     <div class="confirm-modal">
       <h2 class="confirm-title">Confirmació</h2>

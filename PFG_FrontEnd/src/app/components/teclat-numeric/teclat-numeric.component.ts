@@ -9,7 +9,7 @@ import {Component, EventEmitter, HostListener, Input, Output, SimpleChanges} fro
 export class TeclatNumericComponent {
   @Input() title: string = 'Introdueix quantitat';
   @Output() ok = new EventEmitter<number>();
-  @Output() close = new EventEmitter<void>(); // opcional: per tancar el pop-up si en tens
+  @Output() close = new EventEmitter<void>();
   @Input() initialValue: number | null = null;
   value = '';
 
@@ -22,7 +22,6 @@ export class TeclatNumericComponent {
       this.value = v != null ? v.toString().replace('.', ',') : '';
     }
   }
-  // Suport tecles
   @HostListener('document:keydown', ['$event'])
   onKey(e: KeyboardEvent) {
     if (/^[0-9]$/.test(e.key)) {
@@ -35,7 +34,6 @@ export class TeclatNumericComponent {
       return;
     }
 
-    // backspace → esborra últim caràcter
     if (e.key === 'Backspace') {
       e.preventDefault();
       this.backspace();

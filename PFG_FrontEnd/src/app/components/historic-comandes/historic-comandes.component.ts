@@ -22,7 +22,6 @@ export class HistoricComandesComponent implements OnInit {
   taulaInfo: Taula | null = null;
 
 
-  // FILTRES
   textFiltrar: string = '';
   estat: string = '';
   formaPagament: string = '';
@@ -30,16 +29,13 @@ export class HistoricComandesComponent implements OnInit {
   importMaxim: number | null = null;
   taulaSeleccionada: number | null = null;
 
-  // Llista de taules per al combo (ve del backend)
   taulesDisponibles: Taula[] = [];
 
-  // PAGINACIÓ
   page = 1;
   pageSize = 10;
   total = 0;
   comandes: Comanda[] = [];
 
-  // TECLAT NUMÈRIC
   mostraTeclat = false;
   teclatTitle = 'Introdueix quantitat';
   campActiu: CampTeclat | null = null;
@@ -51,7 +47,6 @@ export class HistoricComandesComponent implements OnInit {
   constructor(private route: ActivatedRoute, private location: Location, private http: HttpClient, private router: Router) {}
 
   ngOnInit(): void {
-    // inicialitzem rang de dates (últim any)
     const avui = new Date();
     const faUnAny = new Date();
     faUnAny.setFullYear(avui.getFullYear() - 1);
@@ -63,7 +58,7 @@ export class HistoricComandesComponent implements OnInit {
 
     this.route.paramMap.subscribe(pm => {
       const idParam = pm.get('id');
-      this.idTaula = idParam ? +idParam : 0;  // 0 = totes les taules
+      this.idTaula = idParam ? +idParam : 0;
 
       this.taulaInfo = null;
 
@@ -243,16 +238,14 @@ export class HistoricComandesComponent implements OnInit {
       .set('importMinim', this.importMinim != null ? String(this.importMinim) : '')
       .set('importMaxim', this.importMaxim != null ? String(this.importMaxim) : '');
 
-    this.http
-      .get<number>(`${this.api}/Comanda/GetCountComandaByTaula`, { params })
-      .subscribe({
-        next: data => {
-          this.total = data;
-        },
-        error: err => {
-          console.error(err);
-        }
-      });
+    this.http.get<number>(`${this.api}/Comanda/GetCountComandaByTaula`, { params }).subscribe({
+      next: data => {
+        this.total = data;
+      },
+      error: err => {
+        console.error(err);
+      }
+    });
   }
 
   private carregarComandes(): void {
@@ -271,16 +264,16 @@ export class HistoricComandesComponent implements OnInit {
       .set('importMaxim', this.importMaxim != null ? String(this.importMaxim) : '');
 
     this.http.get<Comanda[]>(`${this.api}/Comanda/GetComandaByTaulaPaginada`, { params }).subscribe({
-        next: data => {
-          this.comandes = data.map(c => ({
-            ...c,
-            Productes: undefined
-          }));
-        },
-        error: err => {
-          console.error(err);
-        }
-      });
+      next: data => {
+        this.comandes = data.map(c => ({
+          ...c,
+          Productes: undefined
+        }));
+      },
+      error: err => {
+        console.error(err);
+      }
+    });
   }
 
   private carregarTaulesFiltre(): void {

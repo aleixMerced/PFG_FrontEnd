@@ -138,18 +138,17 @@ export class ModificarTaulaComponent implements OnInit {
     formData.append('TeSubTaules', this.teSubtaules ? 'true' : 'false');
     formData.append('Actiu', this.actiu ? '1' : '0');
 
-    this.http.put(`${this.api}/Taula/PutTaula`, formData)
-      .subscribe({
-        next: () => {
-          this.notif.success('Taula modificada correctament');
-          this.canviarTaula();
-          this.carregarTaules();
-        },
-        error: err => {
-          console.error(err);
-          this.notif.error('Error en modificar la taula');
-        }
-      });
+    this.http.put(`${this.api}/Taula/PutTaula`, formData).subscribe({
+      next: () => {
+        this.notif.success('Taula modificada correctament');
+        this.canviarTaula();
+        this.carregarTaules();
+      },
+      error: err => {
+        console.error(err);
+        this.notif.error('Error en modificar la taula');
+      }
+    });
   }
 
   eliminarTaula(): void {
@@ -160,18 +159,17 @@ export class ModificarTaulaComponent implements OnInit {
 
     const id = this.taulaSeleccionada.idTaula;
 
-    this.http.delete(`${this.api}/Taula/DeleteTaula?id=${id}`)
-      .subscribe({
-        next: () => {
-          this.notif.success('Taula esborrada correctament');
-          this.mostraConfirmacioEliminar = false;
-          this.canviarTaula();
-          this.carregarTaules();
-        },
-        error: err => {
-          console.error(err);
-          this.notif.error('Error en esborrar la taula');
-        }
-      });
+    this.http.delete(`${this.api}/Taula/DeleteTaula?id=${id}`).subscribe({
+      next: () => {
+        this.notif.success('Taula esborrada correctament');
+        this.mostraConfirmacioEliminar = false;
+        this.canviarTaula();
+        this.carregarTaules();
+      },
+      error: err => {
+        console.error(err);
+        this.notif.error('Error en esborrar la taula');
+      }
+    });
   }
 }

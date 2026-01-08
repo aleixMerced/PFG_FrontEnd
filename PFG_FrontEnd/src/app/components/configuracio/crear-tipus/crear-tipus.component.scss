@@ -16,7 +16,6 @@ $green-dark: darken($green, 10%);
   position: relative;
 }
 
-/* boto enrere */
 .back-btn {
   position: absolute;
   top: 1.5rem;
@@ -83,7 +82,6 @@ $green-dark: darken($green, 10%);
   text-align: center;
 }
 
-/* formulari -> mateix estil que producte */
 .producte-form,
 .tipus-form {
   display: flex;
@@ -91,12 +89,10 @@ $green-dark: darken($green, 10%);
   gap: 2rem;
 }
 
-/* perquè el formulari de TIPUS ompli l'alçada del panell */
 .tipus-form {
   flex: 1;
 }
 
-/* grid dels camps */
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -146,8 +142,8 @@ $green-dark: darken($green, 10%);
   background-color: #fff;
   padding: 0.5rem 0.75rem;
   display: flex;
-  align-items: center;       /* centrat verticalment dins del wrapper */
-  justify-content: center;   /* una mica més centrat horitzontalment */
+  align-items: center;
+  justify-content: center;
   cursor: pointer;
   box-shadow: 0 1px 3px rgba(0, 0, 0, .06);
   transition:
@@ -155,7 +151,6 @@ $green-dark: darken($green, 10%);
     box-shadow .12s ease,
     background-color .12s ease;
 
-  /* 🔥 que no es quedi enganxat a dalt quant hi ha més alçada */
   align-self: center;
 
   input[type='file'] {
@@ -211,14 +206,12 @@ $green-dark: darken($green, 10%);
   }
 }
 
-/* botons del final */
 .form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
 }
 
-/* només formulari de tipus: empeny els botons cap avall */
 .tipus-form .form-actions {
   margin-top: auto;
 }

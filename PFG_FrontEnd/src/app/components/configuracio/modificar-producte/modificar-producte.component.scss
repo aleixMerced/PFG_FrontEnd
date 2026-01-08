@@ -22,7 +22,7 @@ $danger: #b42424;
   top: 1.5rem;
   right: 1.5rem;
 
-  z-index: 2100; // perquè no el tapi l'overlay del teclat
+  z-index: 2100;
 
   border: none;
   background-color: #fff;
@@ -118,7 +118,7 @@ $danger: #b42424;
 .producte-form {
   display: flex;
   flex-direction: column;
-  gap: 1.2rem; // més compacte
+  gap: 1.2rem;
 }
 
 /* GRID DELS CAMPS */
@@ -162,7 +162,6 @@ $danger: #b42424;
   grid-column: 1 / -1;
 }
 
-/* IMATGE + UPLOAD */
 .imatge-grid {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);
@@ -196,7 +195,6 @@ $danger: #b42424;
   }
 }
 
-/* ESTIL DEL FILE INPUT */
 .file-input-wrapper {
   position: relative;
   border-radius: 8px;
@@ -294,7 +292,6 @@ $danger: #b42424;
   }
 }
 
-/* BOTÓ ELIMINAR */
 .danger-btn {
   background-color: $danger;
   color: #fff;
@@ -311,11 +308,10 @@ $danger: #b42424;
   }
 }
 
-/* RESPONSIVE */
 @media (max-width: 700px) {
   .config-panel {
     padding: 1.2rem 1rem;
-    max-height: none; // deixa que tota la pàgina faci scroll
+    max-height: none;
   }
 
   .titol {

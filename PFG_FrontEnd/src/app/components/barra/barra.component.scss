@@ -192,7 +192,6 @@ $green-dark: darken($green, 10%);
   }
 }
 
-/* Mòbil petit → 2 per fila i botons en columna */
 @media (max-width: 600px) {
   .pla-general {
     grid-template-columns: repeat(2, minmax(110px, 1fr));

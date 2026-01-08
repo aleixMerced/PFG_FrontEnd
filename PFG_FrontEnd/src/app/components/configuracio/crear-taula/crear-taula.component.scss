@@ -83,7 +83,6 @@ $green-dark: darken($green, 10%);
   text-align: center;
 }
 
-/* formulari -> mateix estil que producte / tipus */
 .producte-form,
 .tipus-form,
 .taula-form {
@@ -92,12 +91,10 @@ $green-dark: darken($green, 10%);
   gap: 2rem;
 }
 
-/* perquè el formulari de TAULA ompli l'alçada del panell */
 .taula-form {
   flex: 1;
 }
 
-/* grid dels camps */
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -140,7 +137,6 @@ $green-dark: darken($green, 10%);
   grid-column: 1 / -1;
 }
 
-/* Checkbox "Té sub-taules?" alineat bonic */
 .checkbox-field {
   flex-direction: row;
   justify-content: center;
@@ -163,7 +159,6 @@ $green-dark: darken($green, 10%);
   }
 }
 
-/* Sub-taules: dos inputs en línia que es fan columna al mòbil */
 .subtaules-grid {
   display: flex;
   gap: 1rem;
@@ -178,14 +173,12 @@ $green-dark: darken($green, 10%);
   }
 }
 
-/* botons del final */
 .form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
 }
 
-/* només formulari de taula: empeny els botons cap avall */
 .taula-form .form-actions {
   margin-top: auto;
 }

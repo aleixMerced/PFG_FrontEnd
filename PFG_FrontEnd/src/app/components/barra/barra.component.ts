@@ -25,31 +25,30 @@ export class BarraComponent implements OnInit {
   constructor(private router: Router, private http: HttpClient, private notif: NotificacioService) { }
 
   ngOnInit(): void {
-    this.http.get<Taula[]>(`${this.api}/Taula/GetTaulesInterior`)
-      .subscribe({
-        next: data => {
-          const pares = data
-            .filter(t => t.taulaPare == null)
-            .map(p => ({ ...p, subTaules: [] as Taula[] }));
+    this.http.get<Taula[]>(`${this.api}/Taula/GetTaulesInterior`).subscribe({
+      next: data => {
+        const pares = data
+          .filter(t => t.taulaPare == null)
+          .map(p => ({ ...p, subTaules: [] as Taula[] }));
 
-          const fills = data.filter(t => t.taulaPare != null);
+        const fills = data.filter(t => t.taulaPare != null);
 
-          const mapPare = new Map<number, Taula>();
-          for (const p of pares) mapPare.set(p.idTaula, p);
+        const mapPare = new Map<number, Taula>();
+        for (const p of pares) mapPare.set(p.idTaula, p);
 
-          for (const f of fills) {
-            const pare = mapPare.get(f.taulaPare!);
-            if (pare?.subTaules) pare.subTaules.push(f);
-          }
+        for (const f of fills) {
+          const pare = mapPare.get(f.taulaPare!);
+          if (pare?.subTaules) pare.subTaules.push(f);
+        }
 
-          for (const p of pares) {
-            p.subTaules?.sort((a, b) => a.numTaula - b.numTaula);
-          }
+        for (const p of pares) {
+          p.subTaules?.sort((a, b) => a.numTaula - b.numTaula);
+        }
 
-          this.taules = pares.sort((a, b) => a.numTaula - b.numTaula);
-        },
-        error: err => console.error(err)
-      });
+        this.taules = pares.sort((a, b) => a.numTaula - b.numTaula);
+      },
+      error: err => console.error(err)
+    });
   }
 
   onClickTaula(taula: Taula): void {
@@ -159,40 +158,39 @@ export class BarraComponent implements OnInit {
     if (!this.selectedTaula) return;
 
     if (this.selectedTaula.ocupat) {
-      this.http.get<number>(`${this.api}/Taula/GetCountTaules?idTaula=${this.selectedTaula.idTaula}`)
-        .subscribe({
-          next: (data) => {
-            if (data === 0) {
-              console.log("AKI3")
-              this.http.put<boolean>(`${this.api}/Taula/CanviarEstatTaula?id=${this.selectedTaula!.idTaula}`, {})
-                .subscribe({
-                  next: () => {
-                    this.notif.success('Taula desocupada correctament.');
+      this.http.get<number>(`${this.api}/Taula/GetCountTaules?idTaula=${this.selectedTaula.idTaula}`).subscribe({
+        next: (data) => {
+          if (data === 0) {
+            console.log("AKI3")
+            this.http.put<boolean>(`${this.api}/Taula/CanviarEstatTaula?id=${this.selectedTaula!.idTaula}`, {})
+              .subscribe({
+                next: () => {
+                  this.notif.success('Taula desocupada correctament.');
 
-                    this.selectedTaula!.ocupat = 0;
-                    this.selectedTaula!.imatge = this.imatgePerTaula(this.selectedTaula!);
+                  this.selectedTaula!.ocupat = 0;
+                  this.selectedTaula!.imatge = this.imatgePerTaula(this.selectedTaula!);
 
-                    const idx = this.taules.findIndex(t => t.idTaula === this.selectedTaula!.idTaula);
-                    if (idx !== -1) {
-                      this.taules[idx].ocupat = 0;
-                      this.taules[idx].imatge = this.imatgePerTaula(this.taules[idx]);
-                    }
-                  },
-                  error: err => {
-                    this.notif.error('No s’ha pogut desocupar la taula.');
-                    console.error(err);
+                  const idx = this.taules.findIndex(t => t.idTaula === this.selectedTaula!.idTaula);
+                  if (idx !== -1) {
+                    this.taules[idx].ocupat = 0;
+                    this.taules[idx].imatge = this.imatgePerTaula(this.taules[idx]);
                   }
-                });
+                },
+                error: err => {
+                  this.notif.error('No s’ha pogut desocupar la taula.');
+                  console.error(err);
+                }
+              });
 
-            } else if (data === -1) {
-              this.notif.warning('Aquesta taula té més d\'una comanda oberta.');
-              this.buscarHistoric();
-            } else {
-              this.router.navigate(['/comandaFinal', data]);
-            }
-          },
-          error: err => console.error(err)
-        });
+          } else if (data === -1) {
+            this.notif.warning('Aquesta taula té més d\'una comanda oberta.');
+            this.buscarHistoric();
+          } else {
+            this.router.navigate(['/comandaFinal', data]);
+          }
+        },
+        error: err => console.error(err)
+      });
 
     } else {
       this.router.navigate(['/comandaFinal/taula', this.selectedTaula.idTaula]);

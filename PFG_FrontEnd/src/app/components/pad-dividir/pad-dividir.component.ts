@@ -28,7 +28,6 @@ export class PadDividirComponent {
   @HostListener('document:keydown.backspace') onKeyBackspace() { this.backspace(); }
 
   onNumberClick(n: number): void {
-    // multi-dígit: concatenem
     this.selectedValueAux = `${this.selectedValue}${n}`
     if(this.producte){
       if(n > this.producte.unitats ||  Number(this.selectedValueAux ) > this.producte.unitats ){
@@ -40,7 +39,6 @@ export class PadDividirComponent {
   }
 
   onFractionClick(frac: string): void {
-    // substituïm per la fracció
     this.selectedValue = frac;
   }
 

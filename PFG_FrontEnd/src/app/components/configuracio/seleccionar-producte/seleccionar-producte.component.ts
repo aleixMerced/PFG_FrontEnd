@@ -18,7 +18,7 @@ export class SeleccionarProducteComponent implements OnInit {
   productes: Producte[] = [];
   tipusProducte: TipusProducte[] = [];
 
-  tipusSeleccionat: TipusProducte | null = null; // null = TOTS
+  tipusSeleccionat: TipusProducte | null = null;
   productesFiltrats: Producte[] = [];
 
   producteSeleccionat: Producte | null = null;
@@ -37,34 +37,32 @@ export class SeleccionarProducteComponent implements OnInit {
   }
 
   carregarTipus(): void {
-    this.http.get<any[]>(`${this.api}/TipusProducte/GetNomTipus`)
-      .subscribe({
-        next: data => {
-          this.tipusProducte = (data ?? []).map(x => ({
-            idTipus: x.idTipus,
-            nomTipus: (x.nomTipus ?? '').trim(),
-            fotoTipus: x.fotoTipus
-          }));
-        },
-        error: err => {
-          console.error(err);
-          this.notif.error('No s’han pogut carregar els tipus');
-        }
-      });
+    this.http.get<any[]>(`${this.api}/TipusProducte/GetNomTipus`).subscribe({
+      next: data => {
+        this.tipusProducte = (data ?? []).map(x => ({
+          idTipus: x.idTipus,
+          nomTipus: (x.nomTipus ?? '').trim(),
+          fotoTipus: x.fotoTipus
+        }));
+      },
+      error: err => {
+        console.error(err);
+        this.notif.error('No s’han pogut carregar els tipus');
+      }
+    });
   }
 
   carregarProductes(): void {
-    this.http.get<Producte[]>(`${this.api}/Producte/GetProductes`)
-      .subscribe({
-        next: data => {
-          this.productes = data ?? [];
-          this.aplicarFiltreTipus();
-        },
-        error: err => {
-          console.error(err);
-          this.notif.error('No s’han pogut carregar els productes');
-        }
-      });
+    this.http.get<Producte[]>(`${this.api}/Producte/GetProductes`).subscribe({
+      next: data => {
+        this.productes = data ?? [];
+        this.aplicarFiltreTipus();
+      },
+      error: err => {
+        console.error(err);
+        this.notif.error('No s’han pogut carregar els productes');
+      }
+    });
   }
 
   get imatgeProducteSeleccionat(): string | null {
@@ -79,7 +77,6 @@ export class SeleccionarProducteComponent implements OnInit {
   }
 
   onTipusChange(): void {
-    // IMPORTANT: canviar tipus invalida el producte triat
     this.producteSeleccionat = null;
     this.aplicarFiltreTipus();
   }

@@ -8,7 +8,6 @@
   <div class="config-panel" *ngIf="producteSeleccionat">
     <h1 class="titol">Gestionar producte</h1>
 
-    <!-- capçalera amb nom del producte i botó per canviar -->
     <div class="header-row">
       <div class="producte-info">
         <span class="label">Producte seleccionat</span>
@@ -22,10 +21,8 @@
 
     <form class="producte-form">
 
-      <!-- FORMULARI DADES PRODUCTE -->
       <div class="form-grid">
 
-        <!-- Nom producte -->
         <div class="form-field">
           <label for="nomProducte">Nom del producte</label>
           <input
@@ -37,7 +34,6 @@
             required />
         </div>
 
-        <!-- Tipus producte -->
         <div class="form-field">
           <label for="tipusProducte">Tipus de producte</label>
           <select
@@ -53,7 +49,6 @@
           </select>
         </div>
 
-        <!-- Preu venda -->
         <div class="form-field">
           <label for="preuVenda">Preu de venda (€)</label>
           <input
@@ -65,7 +60,6 @@
             (click)="obrirTeclat('preuVenda')" />
         </div>
 
-        <!-- Preu compra -->
         <div class="form-field">
           <label for="preuCompra">Preu de compra (€)</label>
           <input
@@ -77,7 +71,6 @@
             (click)="obrirTeclat('preuCompra')" />
         </div>
 
-        <!-- Estoc -->
         <div class="form-field">
           <label for="estoc">Estoc</label>
           <input
@@ -89,7 +82,6 @@
             (click)="obrirTeclat('estoc')" />
         </div>
 
-        <!-- Mínim estoc -->
         <div class="form-field">
           <label for="minimEstoc">Mínim d'estoc</label>
           <input
@@ -101,17 +93,14 @@
             (click)="obrirTeclat('minimEstoc')" />
         </div>
 
-        <!-- Imatge producte -->
         <div class="form-field form-field-full">
           <label for="imatgeProducte">Imatge del producte</label>
 
           <div class="imatge-grid">
-            <!-- previsualització imatge actual -->
             <div class="imatge-preview" *ngIf="imatgeUrl">
               <img [src]="imatgeUrl" alt="Imatge producte" />
             </div>
 
-            <!-- upload nova imatge -->
             <div class="file-input-wrapper">
               <input
                 id="imatgeProducte"
@@ -129,7 +118,6 @@
 
       </div>
 
-      <!-- BOTONS ACCIONS -->
       <div class="form-actions">
         <button class="primary-btn" type="button" (click)="modificarProducte()">
           Modificar
@@ -147,7 +135,6 @@
     </form>
   </div>
 
-  <!-- POPUP TECLAT NUMÈRIC -->
   <div class="overlay" *ngIf="mostraTeclat">
     <div class="overlay-backdrop" (click)="tancarTeclat()"></div>
 

@@ -45,7 +45,6 @@
 
         <div class="form-grid">
 
-          <!-- 🔢 Número de taula -->
           <div class="form-field form-field-full num-taula-field" (click)="obrirTeclat()">
             <label for="numTaula">Número de taula</label>
             <input
@@ -57,7 +56,6 @@
               readonly />
           </div>
 
-          <!-- Ubicació -->
           <div class="form-field form-field-full">
             <label for="ubicacioTaula">Ubicació de la taula</label>
             <select
@@ -117,7 +115,6 @@
     </form>
   </div>
 
-  <!-- POPUP CONFIRMACIÓ ESBORRAR TAULA -->
   <div class="overlay" *ngIf="mostraConfirmacioEliminar">
     <div class="overlay-backdrop" (click)="mostraConfirmacioEliminar = false"></div>
 
@@ -146,7 +143,6 @@
     </div>
   </div>
 
-  <!-- 🔢 OVERLAY TECLAT NUMÈRIC -->
   <div class="overlay" *ngIf="mostrarTeclat">
     <div class="overlay-backdrop" (click)="tancarTeclat()"></div>
 

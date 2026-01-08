@@ -35,8 +35,7 @@ export class MenuSelectorComponent implements OnInit {
   @Input() idTaula: string = 'Barra';
   @Input() mode: 'select' | 'view' = 'select';
 
-  // ✅ sencer: primers/segons (com sempre)
-  // ✅ mig: llista única i quantitats per plat
+  // mig: llista única i quantitats per plat
   @Input() migMenu: 'sencer' | 'mig' = 'sencer';
 
   carregant = false;
@@ -80,7 +79,6 @@ export class MenuSelectorComponent implements OnInit {
     this.carregant = true;
     this.errorCarrega = false;
 
-    // ✅ mig menu (i view) agafa menú del dia/base sense params
     const url = (this.esView || this.migMenu === 'mig')
       ? `${this.api}/Menu/GetPlatsMenu`
       : `${this.api}/Menu/GetPlatsMenu?idMenu=${this.menuProducte.idProducte}`;
@@ -129,7 +127,6 @@ export class MenuSelectorComponent implements OnInit {
       mostrarObservacions: false
     }));
 
-    // ✅ mig: llista única i editable
     this.platsMigMenu = this.totsPlatsOriginal.map(p => ({ ...p }));
   }
 
@@ -143,7 +140,6 @@ export class MenuSelectorComponent implements OnInit {
     plat.quantitat = nova < 0 ? 0 : nova;
   }
 
-  // ---------- MIG MENU ----------
   canviarQuantitatMig(plat: PlatMenu, delta: number) {
     if (this.esView) return;
     const nova = (plat.quantitat ?? 0) + delta;
@@ -154,7 +150,6 @@ export class MenuSelectorComponent implements OnInit {
     return this.platsMigMenu.reduce((acc, p) => acc + (p.quantitat ?? 0), 0);
   }
 
-  // ---------- comuns ----------
   toggleObservacions(plat: PlatMenu) {
     if (this.esView) return;
     plat.mostrarObservacions = !plat.mostrarObservacions;
@@ -202,7 +197,6 @@ export class MenuSelectorComponent implements OnInit {
     };
   }
 
-  // ✅ mig menú: envia TOTS els plats amb quantitat > 0, separant per categoria
   private buildBodyCuinaMig() {
     const sel = this.platsMigMenu.filter(p => (p.quantitat ?? 0) > 0);
 
@@ -234,7 +228,7 @@ export class MenuSelectorComponent implements OnInit {
       return;
     }
 
-    // ✅ MIG MENU
+    // MIG MENU
     if (this.migMenu === 'mig') {
       const total = this.totalMigMenus;
 
@@ -257,7 +251,7 @@ export class MenuSelectorComponent implements OnInit {
       return;
     }
 
-    // ✅ SENCER
+    // SENCER
     const totsPrimers = [
       ...this.primers.filter(p => p.quantitat > 0),
       ...this.primersEspecial.filter(p => p.quantitat > 0)

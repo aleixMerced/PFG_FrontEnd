@@ -468,7 +468,6 @@ button:focus-visible {
     }
   }
 
-  // ✅ 2 línies (5 + 5) amb totes les monedes/bitllets
   .quick-grid {
     display: grid;
     grid-template-columns: repeat(5, 1fr);

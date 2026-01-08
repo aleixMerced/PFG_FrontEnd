@@ -57,7 +57,6 @@ $green-dark: darken($green, 10%);
   }
 }
 
-/* panell blanc del mig */
 .config-panel {
   background-color: $bg-light;
   border-radius: 18px;
@@ -74,7 +73,6 @@ $green-dark: darken($green, 10%);
   flex-direction: column;
 }
 
-/* títol */
 .titol {
   margin: 0 0 2rem 0;
   font-size: 1.8rem;
@@ -83,7 +81,6 @@ $green-dark: darken($green, 10%);
   text-align: center;
 }
 
-/* formulari */
 .producte-form {
   flex: 1;
   display: flex;
@@ -93,7 +90,6 @@ $green-dark: darken($green, 10%);
   gap: 2rem;
 }
 
-/* ===== SELECTOR PRODUCTE ===== */
 
 .selector-wrapper {
   width: 100%;
@@ -217,7 +213,6 @@ $green-dark: darken($green, 10%);
   }
 }
 
-/* botons */
 .form-actions {
   display: flex;
   justify-content: center;

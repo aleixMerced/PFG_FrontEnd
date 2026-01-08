@@ -147,7 +147,6 @@ export class ModificarMenuComponent implements OnInit {
       });
   }
 
-  // ===== Accions =====
   actualitzarMenu() {
     if (!this.diaSeleccionat) {
       this.notify.error('Selecciona un dia primer');
@@ -238,7 +237,6 @@ export class ModificarMenuComponent implements OnInit {
     dialogRef.close();
   }
 
-  // ===== Filters =====
   get primersFiltrats(): ProducteCheck[] {
     const f = this.filterPrimers.trim().toLowerCase();
     if (!f) return this.PrimersPlats;

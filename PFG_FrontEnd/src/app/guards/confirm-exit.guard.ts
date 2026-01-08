@@ -13,7 +13,6 @@ export class ConfirmExitGuard implements CanDeactivate<ComandaFinalComponent> {
     const allow = this.nav.confirmOrBlock();
     if (!allow) return false;
 
-    // Si no cal esborrar, deixem sortir
     if (component.comandaGuardada) return true;
     if (component.readOnly) return true;
     if (!component.idComanda) return true;

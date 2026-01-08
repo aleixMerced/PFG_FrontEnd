@@ -84,7 +84,6 @@ $danger: #b42424;
   text-align: center;
 }
 
-/* FORMULARI GLOBAL */
 .taula-form {
   display: flex;
   flex-direction: column;
@@ -92,7 +91,6 @@ $danger: #b42424;
   flex: 1;
 }
 
-/* 1️⃣ SELECTOR INICIAL */
 .selector-taula {
   display: flex;
   flex-direction: column;
@@ -124,7 +122,6 @@ $danger: #b42424;
   }
 }
 
-/* CONTENIDOR DEL DETALL (ubicació + subtaules + botons) */
 .detall-container {
   margin-top: 1rem;
   padding: 1.2rem 1.5rem;
@@ -133,7 +130,6 @@ $danger: #b42424;
   box-shadow: 0 4px 10px rgba(0, 0, 0, .08);
 }
 
-/* CAPÇALERA TAULA SELECCIONADA */
 .header-row {
   display: flex;
   justify-content: space-between;
@@ -159,7 +155,6 @@ $danger: #b42424;
   }
 }
 
-/* GRID DELS CAMPS */
 .form-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -201,7 +196,6 @@ $danger: #b42424;
   grid-column: 1 / -1;
 }
 
-/* Checkbox "Té sub-taules?" alineat */
 .checkbox-field {
   display: flex;
   flex-direction: row;
@@ -222,7 +216,6 @@ $danger: #b42424;
   }
 }
 
-/* BOTONS DEL FINAL */
 .form-actions {
   display: flex;
   justify-content: flex-end;
@@ -281,7 +274,6 @@ $danger: #b42424;
   }
 }
 
-/* BOTÓ ELIMINAR */
 .danger-btn {
   background-color: $danger;
   color: #fff;
@@ -298,7 +290,6 @@ $danger: #b42424;
   }
 }
 
-/* OVERLAY CONFIRMACIÓ */
 .overlay {
   position: fixed;
   inset: 0;

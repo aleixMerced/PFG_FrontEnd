@@ -70,14 +70,7 @@ export class ComandaFinalComponent implements OnInit, OnDestroy {
   private readonly api = environment.apiBaseUrl;
   private routerSub?: Subscription;
 
-  constructor(
-    private http: HttpClient,
-    private router: Router,
-    private route: ActivatedRoute,
-    private notif: NotificacioService,
-    private nav: NavProtectionService,
-    private location: Location
-  ) {}
+  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute, private notif: NotificacioService, private nav: NavProtectionService, private location: Location) {}
 
   ngOnInit() {
     const idParamRaw = this.route.snapshot.paramMap.get('idComanda');
@@ -97,29 +90,28 @@ export class ComandaFinalComponent implements OnInit, OnDestroy {
     }
 
     if (Number.isFinite(id) && id > 0) {
-      this.http.get<Comanda>(`${this.api}/Comanda/GetComandaByID?idComanda=${id}`)
-        .subscribe({
-          next: data => {
-            this.idComanda = data.idComanda;
-            this.nomClient = data.nomClient || '';
+      this.http.get<Comanda>(`${this.api}/Comanda/GetComandaByID?idComanda=${id}`).subscribe({
+        next: data => {
+          this.idComanda = data.idComanda;
+          this.nomClient = data.nomClient || '';
 
-            const estat = (data.estatComanda || '').toUpperCase();
-            this.readOnly = estat !== 'PENDENT';
+          const estat = (data.estatComanda || '').toUpperCase();
+          this.readOnly = estat !== 'PENDENT';
 
-            this.http
-              .get<Taula>(`${this.api}/Taula/GetTaulaByID?idTaula=${data.idTaula}`)
-              .subscribe({
-                next: taula => {
-                  this.taulaSeleccionada = taula;
-                  this.numTaula = taula.nomMostrat;
-                },
-                error: err => console.error(err)
-              });
+          this.http
+            .get<Taula>(`${this.api}/Taula/GetTaulaByID?idTaula=${data.idTaula}`)
+            .subscribe({
+              next: taula => {
+                this.taulaSeleccionada = taula;
+                this.numTaula = taula.nomMostrat;
+              },
+              error: err => console.error(err)
+            });
 
-            this.loadLiniesComanda(data.idComanda);
-          },
-          error: error => console.error(error)
-        });
+          this.loadLiniesComanda(data.idComanda);
+        },
+        error: error => console.error(error)
+      });
     } else {
       this.numeroComanda();
     }
@@ -137,7 +129,7 @@ export class ComandaFinalComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.routerSub?.unsubscribe();
-    console.log('🧹 ComandaFinalComponent destruït');
+    console.log('ComandaFinalComponent destruït');
   }
 
   private loadLiniesComanda(idComanda: number) {
@@ -224,7 +216,7 @@ export class ComandaFinalComponent implements OnInit, OnDestroy {
 
   /**
    * Afegeix "quantitat" unitats del producte d'un cop:
-   * - update stock una sola vegada (delta = -qty)
+   * - update stock una sola vegada (quantitat = -qty)
    * - si la línia ja existeix pendent: PUT una sola vegada amb quantitat final
    * - si no existeix: POST una sola vegada amb quantitat qty
    */
@@ -249,8 +241,7 @@ export class ComandaFinalComponent implements OnInit, OnDestroy {
           quantitat: prodPend.unitats
         };
 
-        this.http.put<boolean>(`${this.api}/Comanda/ActualitzarLiniaComanda?idComanda=${this.idComanda}&idProducte=${prodPend.idProducte}`, body
-        ).subscribe({
+        this.http.put<boolean>(`${this.api}/Comanda/ActualitzarLiniaComanda?idComanda=${this.idComanda}&idProducte=${prodPend.idProducte}`, body).subscribe({
           next: () => console.log('Línia pendent actualitzada (bulk qty)'),
           error: err => console.error(err)
         });
@@ -472,10 +463,7 @@ export class ComandaFinalComponent implements OnInit, OnDestroy {
       preuMoment: sel.total
     };
 
-    this.http.put<boolean>(
-      `${this.api}/Comanda/ActualitzarLiniaComanda?idComanda=${this.idComanda}&idProducte=${sel.idProducte}`,
-      body
-    ).subscribe({
+    this.http.put<boolean>(`${this.api}/Comanda/ActualitzarLiniaComanda?idComanda=${this.idComanda}&idProducte=${sel.idProducte}`, body).subscribe({
       next: () => console.log('Línia pendent actualitzada/eliminada des de GuardarCobrar'),
       error: err => console.error('Error actualitzant línia pendent', err)
     });
@@ -491,8 +479,7 @@ export class ComandaFinalComponent implements OnInit, OnDestroy {
     this.nouValor = '';
   }
 
-  numeroComanda() {
-    this.http.get<number>(`${this.api}/Comanda/GetLastID`).subscribe({
+  numeroComanda() {this.http.get<number>(`${this.api}/Comanda/GetLastID`).subscribe({
       next: response => {
         this.idComanda = response;
 
@@ -533,14 +520,12 @@ export class ComandaFinalComponent implements OnInit, OnDestroy {
     this.mostrarTaules = true;
   }
 
-  obtenirTaules() {
-    this.http.get<Taula[]>(`${this.api}/Taula/GetTaulesActives`)
-      .subscribe({
-        next: response => {
-          this.taules = response.filter(t => t.idTaula < 99);
-        },
-        error: error => console.error(error)
-      });
+  obtenirTaules() {this.http.get<Taula[]>(`${this.api}/Taula/GetTaulesActives`).subscribe({
+      next: response => {
+        this.taules = response.filter(t => t.idTaula < 99);
+      },
+      error: error => console.error(error)
+    });
   }
 
   cobrarComanda() {
@@ -577,88 +562,87 @@ export class ComandaFinalComponent implements OnInit, OnDestroy {
     }
     this.comandaGuardada = true;
 
-    this.http.get<Comanda | null>(`${this.api}/Comanda/GetComandaByID?idComanda=${this.idComanda}`)
-      .subscribe({
-        next: (existeix) => {
-          if (existeix && existeix.idComanda) {
-            const bodyUpdate = {
-              idComanda: existeix.idComanda,
-              nomClient: this.nomClient || existeix.nomClient,
-              estatComanda: existeix.estatComanda,
-              dataComanda: existeix.dataComanda,
-              dataPagament: existeix.dataPagament,
-              tipusPagament: existeix.tipusPagament,
-              preuComanda: this.preuFinal,
-              idTaula: this.taulaSeleccionada?.idTaula ?? existeix.idTaula,
-              Productes: this.productesPendents
-            };
+    this.http.get<Comanda | null>(`${this.api}/Comanda/GetComandaByID?idComanda=${this.idComanda}`).subscribe({
+      next: (existeix) => {
+        if (existeix && existeix.idComanda) {
+          const bodyUpdate = {
+            idComanda: existeix.idComanda,
+            nomClient: this.nomClient || existeix.nomClient,
+            estatComanda: existeix.estatComanda,
+            dataComanda: existeix.dataComanda,
+            dataPagament: existeix.dataPagament,
+            tipusPagament: existeix.tipusPagament,
+            preuComanda: this.preuFinal,
+            idTaula: this.taulaSeleccionada?.idTaula ?? existeix.idTaula,
+            Productes: this.productesPendents
+          };
 
-            this.http.put(`${this.api}/Comanda/PutComanda`, bodyUpdate).subscribe({
-              next: () => console.log('Comanda actualitzada (guardada)'),
-              error: err => {
-                console.error('Error fent PUT de comanda', err);
-                this.comandaGuardada = false;
-                this.notif.error('Error guardant comanda');
-              }
-            });
-          } else {
-            const bodyNova = {
-              idComanda: this.idComanda,
-              nomClient: this.nomClient || (this.taulaSeleccionada ? `Taula ${this.taulaSeleccionada.idTaula}` : ''),
-              estatComanda: 'PENDENT',
-              dataComanda: new Date().toISOString(),
-              dataPagament: null,
-              tipusPagament: null,
-              preuComanda: this.preuFinal,
-              idTaula: this.taulaSeleccionada?.idTaula ?? 99
-            };
+          this.http.put(`${this.api}/Comanda/PutComanda`, bodyUpdate).subscribe({
+            next: () => console.log('Comanda actualitzada (guardada)'),
+            error: err => {
+              console.error('Error fent PUT de comanda', err);
+              this.comandaGuardada = false;
+              this.notif.error('Error guardant comanda');
+            }
+          });
+        } else {
+          const bodyNova = {
+            idComanda: this.idComanda,
+            nomClient: this.nomClient || (this.taulaSeleccionada ? `Taula ${this.taulaSeleccionada.idTaula}` : ''),
+            estatComanda: 'PENDENT',
+            dataComanda: new Date().toISOString(),
+            dataPagament: null,
+            tipusPagament: null,
+            preuComanda: this.preuFinal,
+            idTaula: this.taulaSeleccionada?.idTaula ?? 99
+          };
 
-            this.http.post(`${this.api}/Comanda/PostComanda`, bodyNova).subscribe({
-              next: () => {
-                console.log('Comanda creada (guardada)');
-                this.comandaGuardada = true;
-                this.notif.success('Comanda guardada correctament');
-              },
-              error: err => {
-                console.error('Error fent POST de comanda', err);
-                this.comandaGuardada = false;
-                this.notif.error('Error guardant comanda');
-              }
-            });
-          }
-        },
-        error: err => {
-          if (err.status === 404) {
-            const bodyNova = {
-              idComanda: this.idComanda,
-              nomClient: this.nomClient || (this.taulaSeleccionada ? `Taula ${this.taulaSeleccionada.idTaula}` : ''),
-              estatComanda: 'PENDENT',
-              dataComanda: new Date().toISOString(),
-              dataPagament: null,
-              tipusPagament: null,
-              preuComanda: this.preuFinal,
-              idTaula: this.taulaSeleccionada?.idTaula ?? 99
-            };
-
-            this.http.post(`${this.api}/Comanda/PostComanda`, bodyNova).subscribe({
-              next: () => {
-                console.log('Comanda creada després d’error al GET');
-                this.comandaGuardada = true;
-                this.notif.success('Comanda guardada correctament');
-              },
-              error: err2 => {
-                console.error('Error fent POST de comanda', err2);
-                this.comandaGuardada = false;
-                this.notif.error('Error guardant comanda');
-              }
-            });
-          } else {
-            console.error('Error mirant si existeix la comanda', err);
-            this.comandaGuardada = false;
-            this.notif.error('Error validant comanda');
-          }
+          this.http.post(`${this.api}/Comanda/PostComanda`, bodyNova).subscribe({
+            next: () => {
+              console.log('Comanda creada (guardada)');
+              this.comandaGuardada = true;
+              this.notif.success('Comanda guardada correctament');
+            },
+            error: err => {
+              console.error('Error fent POST de comanda', err);
+              this.comandaGuardada = false;
+              this.notif.error('Error guardant comanda');
+            }
+          });
         }
-      });
+      },
+      error: err => {
+        if (err.status === 404) {
+          const bodyNova = {
+            idComanda: this.idComanda,
+            nomClient: this.nomClient || (this.taulaSeleccionada ? `Taula ${this.taulaSeleccionada.idTaula}` : ''),
+            estatComanda: 'PENDENT',
+            dataComanda: new Date().toISOString(),
+            dataPagament: null,
+            tipusPagament: null,
+            preuComanda: this.preuFinal,
+            idTaula: this.taulaSeleccionada?.idTaula ?? 99
+          };
+
+          this.http.post(`${this.api}/Comanda/PostComanda`, bodyNova).subscribe({
+            next: () => {
+              console.log('Comanda creada després d’error al GET');
+              this.comandaGuardada = true;
+              this.notif.success('Comanda guardada correctament');
+            },
+            error: err2 => {
+              console.error('Error fent POST de comanda', err2);
+              this.comandaGuardada = false;
+              this.notif.error('Error guardant comanda');
+            }
+          });
+        } else {
+          console.error('Error mirant si existeix la comanda', err);
+          this.comandaGuardada = false;
+          this.notif.error('Error validant comanda');
+        }
+      }
+    });
 
     this.notif.success('Comanda guardada correctament');
     this.location.back();
@@ -771,12 +755,7 @@ export class ComandaFinalComponent implements OnInit, OnDestroy {
     return this.buildImgUrl(producte.imatgeProducte);
   }
 
-  private updateStock(
-    idProducte: number,
-    deltaStock: number,
-    onOk: (newStock: number) => void,
-    onFail?: () => void
-  ) {
+  private updateStock(idProducte: number, deltaStock: number, onOk: (newStock: number) => void, onFail?: () => void) {
     const body = {
       idProducte: idProducte.toString(),
       quantitat: deltaStock.toString()
@@ -810,58 +789,51 @@ export class ComandaFinalComponent implements OnInit, OnDestroy {
     this.comandaGuardada = true;
     const idTaula = this.taulaSeleccionada?.idTaula;
 
-    this.http.post<void>(`${this.api}/Comanda/CancelarComanda?idComanda=${this.idComanda}`, null)
-      .subscribe({
-        next: () => {
-        this.eliminarComandaMSG = false;
+    this.http.post<void>(`${this.api}/Comanda/CancelarComanda?idComanda=${this.idComanda}`, null).subscribe({
+      next: () => {
+      this.eliminarComandaMSG = false;
 
-          this.http.get<number>(`${this.api}/Taula/GetCountTaules?idTaula=${idTaula}`)
-            .subscribe({
-              next: (data) => {
-                if (data === 0) {
-                  this.http.put<boolean>(`${this.api}/Taula/CanviarEstatTaula?id=${idTaula}`, {})
-                    .subscribe({
-                      next: () => {
-                        this.notif.success('Comanda eliminada i taula desocupada');
-                        this.eliminarComandaMSG = false;
-                        this.router.navigate(['/barra']);
-                      },
-                      error: (err) => {
-                        console.error(err);
-                        this.notif.warning('Comanda eliminada, però no s’ha pogut desocupar la taula');
-                        this.eliminarComandaMSG = false;
-                        this.router.navigate(['/barra']);
-                      }
-                    });
-                } else {
-                  this.notif.success('Comanda eliminada');
-                  this.eliminarComandaMSG = false;
-                  this.router.navigate(['/barra']);
-                }
-              },
-              error: (err) => {
-                console.error(err);
-                // Si no podem comprovar, no toquem la taula per seguretat
-                this.notif.success('Comanda eliminada');
-                this.eliminarComandaMSG = false;
-                this.router.navigate(['/barra']);
-              }
-            });
-        },
-        error: (err) => {
-          console.error(err);
-          this.notif.error('Error eliminant la comanda');
-        }
-      });
+        this.http.get<number>(`${this.api}/Taula/GetCountTaules?idTaula=${idTaula}`).subscribe({
+          next: (data) => {
+            if (data === 0) {
+              this.http.put<boolean>(`${this.api}/Taula/CanviarEstatTaula?id=${idTaula}`, {})
+                .subscribe({
+                  next: () => {
+                    this.notif.success('Comanda eliminada i taula desocupada');
+                    this.eliminarComandaMSG = false;
+                    this.router.navigate(['/barra']);
+                  },
+                  error: (err) => {
+                    console.error(err);
+                    this.notif.warning('Comanda eliminada, però no s’ha pogut desocupar la taula');
+                    this.eliminarComandaMSG = false;
+                    this.router.navigate(['/barra']);
+                  }
+                });
+            } else {
+              this.notif.success('Comanda eliminada');
+              this.eliminarComandaMSG = false;
+              this.router.navigate(['/barra']);
+            }
+          },
+          error: (err) => {
+            console.error(err);
+            // Si no podem comprovar, no toquem la taula per seguretat
+            this.notif.success('Comanda eliminada');
+            this.eliminarComandaMSG = false;
+            this.router.navigate(['/barra']);
+          }
+        });
+      },
+      error: (err) => {
+        console.error(err);
+        this.notif.error('Error eliminant la comanda');
+      }
+    });
   }
 
 
-  private updateStockByDeltaUnits(
-    idProducte: number,
-    deltaUnits: number,
-    onOk: (newStock: number) => void,
-    onFail?: () => void
-  ) {
+  private updateStockByDeltaUnits(idProducte: number, deltaUnits: number, onOk: (newStock: number) => void, onFail?: () => void) {
     if (deltaUnits === 0) {
       onOk(NaN);
       return;

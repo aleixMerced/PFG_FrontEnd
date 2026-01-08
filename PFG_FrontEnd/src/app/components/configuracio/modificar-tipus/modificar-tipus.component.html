@@ -9,7 +9,6 @@
 
     <form class="tipus-form">
 
-      <!-- 1️⃣ PRIMER: NOMÉS EL SELECTOR -->
       <div class="selector-tipus">
         <label for="tipusSelect" class="selector-label">
           Tipus que vols gestionar
@@ -30,7 +29,6 @@
         </select>
       </div>
 
-      <!-- 2️⃣ DETALLS NOM + IMATGE + BOTONS (NOMÉS QUAN JA HI HA TIPUS) -->
       <div *ngIf="mostrarDetall" class="detall-container">
 
         <!-- capçalera amb tipus seleccionat i botó canviar -->
@@ -82,7 +80,6 @@
           </div>
         </div>
 
-        <!-- BOTONS ACCIÓ -->
         <div class="form-actions">
 
           <button class="primary-btn" type="button" (click)="guardarCanvis()">
@@ -103,7 +100,6 @@
     </form>
   </div>
 
-  <!-- POPUP CONFIRMACIÓ ESBORRAR TIPUS -->
   <div class="overlay" *ngIf="mostraConfirmacioEliminar">
     <div class="overlay-backdrop" (click)="mostraConfirmacioEliminar = false"></div>
 

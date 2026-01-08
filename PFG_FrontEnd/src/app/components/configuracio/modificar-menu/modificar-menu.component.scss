@@ -70,14 +70,13 @@ $danger-dark: darken($danger, 10%);
   color: $green-dark;
 }
 
-/* ===== PICK DAY (INLINE) ===== */
 .pick-day {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.9rem;
   margin-bottom: 1.2rem;
-  flex-wrap: wrap; // en pantalles petites baixa bé
+  flex-wrap: wrap;
 }
 
 .pick-day-label {
@@ -92,7 +91,6 @@ $danger-dark: darken($danger, 10%);
   opacity: 0.8;
 }
 
-/* ===== GRIDS ===== */
 .config-grid {
   flex: 1;
   display: grid;
@@ -176,7 +174,6 @@ $danger-dark: darken($danger, 10%);
   text-overflow: ellipsis;
 }
 
-/* ===== SEGMENTED (tipus menu) ===== */
 .menu-type-inline {
   display: flex;
   align-items: center;
@@ -217,15 +214,14 @@ $danger-dark: darken($danger, 10%);
   }
 }
 
-/* ===== FOOTER (tipus menu + botons alineats) ===== */
 .panel-footer {
   margin-top: auto;
   display: flex;
-  align-items: center;            // clau: mateixa alçada
-  justify-content: space-between; // esquerda / dreta
+  align-items: center;
+  justify-content: space-between;
   gap: 1rem;
   padding-top: 1.2rem;
-  flex-wrap: wrap;                // en mòbil baixa bé
+  flex-wrap: wrap;
 }
 
 .footer-left,

@@ -17,11 +17,9 @@ type CampTeclat = 'preuVenda' | 'preuCompra' | 'estoc' | 'minimEstoc';
 })
 export class ModificarProducteComponent implements OnInit {
 
-  // dades del producte
   producteSeleccionat: Producte | null = null;
   tipusProductes: TipusProducte[] = [];
 
-  // camps formulari
   nomProducte: string | null = null;
   tipusSeleccionat: TipusProducte | null = null;
   preuVenda: number | null = null;
@@ -29,12 +27,10 @@ export class ModificarProducteComponent implements OnInit {
   estoc: number | null = null;
   minimEstoc: number | null = null;
 
-  // imatge
   imatgeUrl: string | null = null;
   selectedImatge: File | null = null;
   nomImatge = '';
 
-  // teclat numèric
   mostraTeclat = false;
   teclatTitle = 'Introdueix quantitat';
   campActiu: CampTeclat | null = null;
@@ -60,29 +56,27 @@ export class ModificarProducteComponent implements OnInit {
 
 
   carregarTipus(): void {
-    this.http.get<TipusProducte[]>(`${this.api}/TipusProducte/GetNomTipus`)
-      .subscribe({
-        next: data => {
-          this.tipusProductes = data;
-          this.actualitzarTipusSeleccionat();
-        },
-        error: err => console.error(err)
-      });
+    this.http.get<TipusProducte[]>(`${this.api}/TipusProducte/GetNomTipus`).subscribe({
+      next: data => {
+        this.tipusProductes = data;
+        this.actualitzarTipusSeleccionat();
+      },
+      error: err => console.error(err)
+    });
   }
 
   carregarProducte(id: number): void {
-    this.http.get<Producte>(`${this.api}/Producte/GetProducteById?id=${id}`)
-      .subscribe({
-        next: p => {
-          this.producteSeleccionat = p;
-          this.carregarFormulariDesDeProducte(p);
-        },
-        error: err => {
-          console.error(err);
-          this.notif.error('No s’ha pogut carregar el producte');
-          this.router.navigate(['/config/seleccionar-producte']);
-        }
-      });
+    this.http.get<Producte>(`${this.api}/Producte/GetProducteById?id=${id}`).subscribe({
+      next: p => {
+        this.producteSeleccionat = p;
+        this.carregarFormulariDesDeProducte(p);
+      },
+      error: err => {
+        console.error(err);
+        this.notif.error('No s’ha pogut carregar el producte');
+        this.router.navigate(['/config/seleccionar-producte']);
+      }
+    });
   }
 
   carregarFormulariDesDeProducte(p: Producte): void {
@@ -272,16 +266,15 @@ export class ModificarProducteComponent implements OnInit {
 
     const id = this.producteSeleccionat.idProducte;
 
-    this.http.delete(`${this.api}/Producte/DeleteProducte?id=${id}`)
-      .subscribe({
-        next: data => {
-          this.notif.success('Producte eliminat correctament');
-          this.router.navigate(['/config/seleccionar-producte']);
-        },
-        error: err => {
-          console.error(err);
-          this.notif.error('Error en eliminar el producte');
-        }
-      });
+    this.http.delete(`${this.api}/Producte/DeleteProducte?id=${id}`).subscribe({
+      next: data => {
+        this.notif.success('Producte eliminat correctament');
+        this.router.navigate(['/config/seleccionar-producte']);
+      },
+      error: err => {
+        console.error(err);
+        this.notif.error('Error en eliminar el producte');
+      }
+    });
   }
 }

@@ -9,7 +9,7 @@ import { environment } from '../../../environments/environment';
   selector: 'app-terrassa',
   standalone: false,
   templateUrl: './terrassa.component.html',
-  styleUrl: '../barra/barra.component.scss'
+  styleUrl: '../barra/barra.component.scss' //agafem estil de la barra, es el mateix
 })
 export class TerrassaComponent implements OnInit {
 
@@ -113,7 +113,6 @@ export class TerrassaComponent implements OnInit {
   }
 
   private imatgePerTaula(_t: Taula): string {
-    // ✅ a terrassa sempre taula "normal"
     return 'uploads/img/taula4.png';
   }
 

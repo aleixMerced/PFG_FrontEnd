@@ -37,16 +37,15 @@ export class ModificarTipusComponent implements OnInit {
   }
 
   carregarTipus(): void {
-    this.http.get<TipusProducte[]>(`${this.api}/TipusProducte/GetNomTipus`)
-      .subscribe({
-        next: data => {
-          this.tipusProductes = data;
-        },
-        error: err => {
-          console.error(err);
-          this.notif.error('No s’han pogut carregar els tipus');
-        }
-      });
+    this.http.get<TipusProducte[]>(`${this.api}/TipusProducte/GetNomTipus`).subscribe({
+      next: data => {
+        this.tipusProductes = data;
+      },
+      error: err => {
+        console.error(err);
+        this.notif.error('No s’han pogut carregar els tipus');
+      }
+    });
   }
 
   onCanviTipus(tipus: TipusProducte | null): void {

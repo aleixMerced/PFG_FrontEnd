@@ -12,7 +12,6 @@ import { environment } from '../../../../environments/environment';
 })
 export class CrearTaulaComponent {
 
-  // camps del formulari
   numTaula: number | null = null;
   ubicacio: 'INTERIOR' | 'TERRASSA' | null = null;
 
@@ -20,7 +19,6 @@ export class CrearTaulaComponent {
   subTaula1: string | null = null;
   subTaula2: string | null = null;
 
-  // teclat numèric
   mostrarTeclat = false;
   teclatTitle = 'Número de taula';
   valorTeclatInicial: number | null = null;
@@ -41,14 +39,12 @@ export class CrearTaulaComponent {
     this.subTaula2 = null;
   }
 
-  // 🔢 Obrir teclat numèric
   obrirTeclat() {
     this.teclatTitle = 'Número de taula';
     this.valorTeclatInicial = this.numTaula;
     this.mostrarTeclat = true;
   }
 
-  // 🔢 Quan l’usuari prem OK al teclat
   onTeclatOk(valor: string | number) {
     const num = Number(valor);
 

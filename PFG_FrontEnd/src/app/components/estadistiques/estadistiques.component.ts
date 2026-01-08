@@ -10,7 +10,7 @@ import {Estadistiques} from '../../interficies/interficies';
 type TipusEstadistica = 'diaria' | 'setmanal' | 'mensual' | 'anual';
 type CampTeclat = 'anySetmanal' | 'setmana' | 'anyMensual' | 'anyAnual';
 
-// ✅ Format visual del datepicker: dd-MM-yyyy
+//  Format visual del datepicker: dd-MM-yyyy
 export const DD_MM_YYYY_FORMATS = {
   parse: { dateInput: 'DD-MM-YYYY' },
   display: {
@@ -37,7 +37,6 @@ export class EstadistiquesComponent {
   tipusEstadistica: TipusEstadistica | null = null;
   mostrarDetall = false;
 
-  // 📅 Datepicker
   dataDiaria: Date | null = null;
 
   anySetmanal: number | null = null;
@@ -66,7 +65,6 @@ export class EstadistiquesComponent {
   resumCarregat = false;
   carregantResum = false;
 
-  // 🔢 teclat numèric
   mostrarTeclat = false;
   teclatTitle = '';
   valorTeclatInicial: number | null = null;
@@ -79,11 +77,7 @@ export class EstadistiquesComponent {
   private readonly ANY_MIN = 1900;
   private readonly ANY_MAX = 2999;
 
-  constructor(
-    private location: Location,
-    private notify: NotificacioService,
-    private http: HttpClient
-  ) {}
+  constructor(private location: Location, private notify: NotificacioService, private http: HttpClient) {}
 
   tornarEnrere(): void {
     this.location.back();
@@ -93,7 +87,6 @@ export class EstadistiquesComponent {
     this.tipusEstadistica = tipus;
     this.mostrarDetall = !!tipus;
 
-    // Netejar filtres
     this.dataDiaria = null;
     this.anySetmanal = null;
     this.setmana = null;
@@ -107,7 +100,6 @@ export class EstadistiquesComponent {
   onCanviFiltre(): void {
     this.resetResum();
 
-    // ✅ de moment NOMÉS backend quan és diari i hi ha data
     if (this.tipusEstadistica === 'diaria' && this.dataDiaria) {
       this.getResumDiari(this.dataDiaria);
     }
@@ -173,9 +165,7 @@ export class EstadistiquesComponent {
   private getResumSetmanal(any: number, setmana: number): void {
     this.carregantResum = true;
 
-    this.http.get<Estadistiques>(
-      `${this.api}/Estadistiques/getResumSetmanal?any=${any}&setmana=${setmana}`
-    ).subscribe({
+    this.http.get<Estadistiques>(`${this.api}/Estadistiques/getResumSetmanal?any=${any}&setmana=${setmana}`).subscribe({
       next: (res) => {
         this.resum = res;
         this.resumCarregat = true;
@@ -194,9 +184,7 @@ export class EstadistiquesComponent {
   private getResumMensual(any: number, mes: number): void {
     this.carregantResum = true;
 
-    this.http.get<Estadistiques>(
-      `${this.api}/Estadistiques/getResumMensual?any=${any}&mes=${mes}`
-    ).subscribe({
+    this.http.get<Estadistiques>(`${this.api}/Estadistiques/getResumMensual?any=${any}&mes=${mes}`).subscribe({
       next: (res) => {
         this.resum = res;
         this.resumCarregat = true;
@@ -215,9 +203,7 @@ export class EstadistiquesComponent {
   private getResumAnual(any: number): void {
     this.carregantResum = true;
 
-    this.http.get<Estadistiques>(
-      `${this.api}/Estadistiques/getResumAnual?any=${any}`
-    ).subscribe({
+    this.http.get<Estadistiques>(`${this.api}/Estadistiques/getResumAnual?any=${any}`).subscribe({
       next: (res) => {
         this.resum = res;
         this.resumCarregat = true;

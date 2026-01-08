@@ -32,7 +32,6 @@ export class DividirCompteComponent implements OnInit, OnDestroy {
   metodePagament: MetodePagament = 'targeta';
   importACobrar = 0;
   efectiuPagat: number | null = null;
-  quickVals = [0.5, 1, 2, 10, 20, 50];
 
   // Fraccions / unitats
   UseFraccions = true;
@@ -45,10 +44,8 @@ export class DividirCompteComponent implements OnInit, OnDestroy {
   basePart = 0;
   lastPart = 0;
 
-  // Total comanda
   totalComanda = 0;
 
-  // Flags de flux
   totPagat = false;
   allPaid = false;
   savedToBackend = false;
@@ -253,7 +250,6 @@ export class DividirCompteComponent implements OnInit, OnDestroy {
   }
 
   get potConfirmarPagament(): boolean {
-    // Mode divisió de comanda
     if (this.divisionMode) {
       if (this.metodePagament === 'targeta') return true;
       return (this.efectiuPagat ?? 0) >= this.importACobrar;
@@ -499,10 +495,10 @@ export class DividirCompteComponent implements OnInit, OnDestroy {
         this.comanda!.tipusPagament = tipus as any;
         this.comanda!.dataPagament = new Date().toISOString() as any;
 
-        // ✅ 1) Imprimir ticket (encara que després falli desocupar)
+        // Imprimir ticket (encara que després falli desocupar)
         await this.imprimirTicketFinal(this.comanda!.idComanda);
 
-        // ✅ 2) Comprovar taula i desocupar només si count === 0
+        // Comprovar taula i desocupar només si count === 0
         if (this.comanda!.idTaula !== 99) {
           this.http.get<number>(`${this.api}/Taula/GetCountTaules?idTaula=${this.comanda!.idTaula}`)
             .subscribe({
